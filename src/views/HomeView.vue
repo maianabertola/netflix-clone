@@ -1,20 +1,35 @@
 <template>
-    <div v-if="moviesData && moviesData.results" class="relative w-full">
-        <div class="relative z-0 w-full h-[500px]">
-            <img :src="moviePoster" class="w-full h-full object-cover" alt="Movie Poster" />
-        </div>
-        <div class="absolute top-10 left-10 z-10 p-50 w-3/5">
-            <h1>Movies to not miss</h1>
-            <div class="bg-neutral-500/50 p-5 rounded">
-                <h2>{{ moviesData.results[0].original_title }}</h2>
-                <p>{{ moviesData.results[0].overview }}</p>
+    <!-- HERO SECTION -->
+    <section>
+        <div v-if="moviesData && moviesData.results" class="relative w-full">
+            <div class="relative z-0 w-full h-[80vh] brightness-50">
+                <img :src="moviePoster" class="w-full h-full object-cover" alt="Movie Poster" />
+            </div>
+            <div class="absolute top-10 left-10 z-10 p-50 w-3/5">
+                <h1>Movies to not miss</h1>
+                <div class="bg-neutral-500/50 p-5 rounded">
+                    <h2>{{ moviesData.results[0].original_title }}</h2>
+                    <p>{{ moviesData.results[0].overview }}</p>
+                    <div class="flex flex-row gap-4">
+                        <MyButton cta="More info" @click="navToMovieDetails"></MyButton>
+                        <MyButton cta="Add to your favorite"></MyButton>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- TOP 4 MOVIES -->
+    <section>
+        <h1>Best movies of the month</h1>
+        <hr />
+        <div class="grid-cols-2 grid-rows-2"></div>
+    </section>
 </template>
 
 <script>
 import axios from 'axios'
+import MyButton from '../components/MyButton.vue'
 
 export default {
     name: 'HomeView',
@@ -55,10 +70,14 @@ export default {
             }
         },
 
-        getPoster() {
-            if (moviesData.length > 1) {
-            }
+        navToMovieDetails() {
+            const firstMovieId = this.moviesData.results[0].id
+            console.log('ID', firstMovieId)
+            this.$router.push(`/movie-details/${firstMovieId}`)
         },
+    },
+    components: {
+        MyButton,
     },
 }
 </script>

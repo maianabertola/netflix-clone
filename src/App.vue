@@ -12,10 +12,6 @@ import Navbar from './components/Navbar.vue'
 </template>
 
 <style scoped>
-@font-face {
-    font-family: 'Roboto';
-    src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-}
 header {
     line-height: 1.5;
     max-height: 100vh;
