@@ -11,16 +11,17 @@
   font-weight: normal;
 }
 
-a,
-.green {
+a {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
+  color: hsl(60 20% 95%);
+  font-weight: 600;
+  padding: 16px;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: hsla(357, 74%, 42%, 0.2);
   }
 }
 
