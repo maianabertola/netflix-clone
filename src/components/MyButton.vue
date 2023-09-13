@@ -1,5 +1,10 @@
 <template>
-    <button type="button" role="link" class="py-1 px-5 bg-red-700 rounded hover:bg-opacity-80 cursor-pointer">
+    <button
+        type="button"
+        role="link"
+        class="py-1 px-5 bg-red-700 rounded hover:bg-opacity-80 cursor-pointer"
+        @click="handleClick"
+    >
         {{ cta }}
     </button>
 </template>
@@ -10,7 +15,11 @@ export default {
     data() {
         return {}
     },
-    methods: {},
+    methods: {
+        handleClick() {
+            this.$emit('click')
+        },
+    },
     props: {
         cta: {
             type: String,

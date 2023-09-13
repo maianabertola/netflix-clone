@@ -1,14 +1,37 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/dist/output.css" rel="stylesheet" />
-    <title>Netflix Clone</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" href="/" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- <link href="/dist/output.css" rel="stylesheet" /> -->
+        <title>Netflix Clone</title>
+        <!-- Tailwind Elements styles-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
+
+        <!-- Tailwind CSS config -->
+        <script src="https://cdn.tailwindcss.com/3.3.0"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        body: ['Roboto', 'sans-serif'],
+                        mono: ['ui-monospace', 'monospace'],
+                    },
+                },
+                corePlugins: {
+                    preflight: false,
+                },
+            }
+        </script>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="module" src="/src/main.ts"></script>
+        <!-- Tailwind Elements JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
+    </body>
 </html>

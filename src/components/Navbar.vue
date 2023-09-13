@@ -1,5 +1,5 @@
 <template>
-    <nav class="w-full sticky top-0 p-5">
+    <nav class="w-full sticky top-0 p-5 z-100">
         <div class="flex justify-between">
             <div>
                 <img src="../assets/logo.png" alt="netflix logo" />
