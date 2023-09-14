@@ -16,7 +16,7 @@
         <hr />
         <div class="grid grid-cols-4 grid-rows-1 gap-3" v-if="bestMovies">
             <MovieCard
-                v-for="movie in bestMovies.splice(0, 4)"
+                v-for="movie in bestMovies"
                 :key="movie.id"
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
@@ -37,6 +37,7 @@
             />
         </div>
         <div v-if="isLoading">Content is loading</div>
+        <div v-if="emptyMovie">Oups, it seems this category is empty</div>
         <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="movies">
             <MovieCard
                 v-for="movie in moviesToDisplay"
@@ -64,7 +65,6 @@ export default {
         const moviesStore = useMoviesStore()
         const { movies, isLoading, error, categories, isLoadingCategories, errorCategories, categoriesToDisplay } =
             storeToRefs(moviesStore)
-        console.log('categories to display', categoriesToDisplay)
 
         onMounted(() => {
             moviesStore.fetchMovies()
@@ -90,6 +90,7 @@ export default {
             errorTopRatedMovies: null,
             selectedCategory: null,
             moviesToDisplay: [],
+            emptyMovie: false,
         }
     },
     async created() {
@@ -111,15 +112,17 @@ export default {
             }
         },
         filteredMovies() {
-            if (!this.selectedCategory) {
-                return this.moviesToDisplay
+            if (this.selectedCategory === 0) {
+                return (this.moviesToDisplay = this.movies)
             } else {
                 this.moviesToDisplay = this.movies
 
                 const moviesFiltered = this.moviesToDisplay.filter((movie) =>
                     movie.genre_ids.includes(this.selectedCategory),
                 )
-                return (this.moviesToDisplay = moviesFiltered)
+                if (!moviesFiltered.length) {
+                    return (this.emptyMovie = true)
+                } else return (this.emptyMovie = false), (this.moviesToDisplay = moviesFiltered)
             }
         },
     },
@@ -133,7 +136,7 @@ export default {
                             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
                     },
                 })
-                this.bestMovies = response.data.results
+                this.bestMovies = response.data.results.splice(0, 4)
             } catch (error) {
                 this.errorBestMovies = error.message
             }
@@ -158,6 +161,9 @@ export default {
         },
         filterMoviesByCategory(id: Number) {
             this.selectedCategory = id
+            console.log('empty state?', this.emptyMovie)
+            //this.emptyMovie = false
+
             this.filteredMovies
         },
     },

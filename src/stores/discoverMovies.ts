@@ -31,7 +31,6 @@ export const useMoviesStore = defineStore({
                     },
                 })
                 this.movies = response.data.results
-                console.log('movies', this.movies)
                 this.isLoading = false
             } catch (error) {
                 this.error = error
@@ -42,7 +41,6 @@ export const useMoviesStore = defineStore({
         },
         async fetchCategories() {
             this.isLoadingCategories = true
-            console.log('FETCH CAT')
             try {
                 const response = await axios.get('https://api.themoviedb.org/3/genre/movie/list', {
                     headers: {
