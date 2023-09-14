@@ -28,7 +28,15 @@
     <section>
         <h1>Discover our movies</h1>
         <hr />
-        <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="isloading">Content is loading</div>
+        <div class="grid grid-cols-6 row-auto gap-5" v-if="categories">
+            <CategoryTab
+                v-for="category in categories"
+                :category="category.name"
+                :key="category.id"
+                @click="() => filterMoviesByCategory(category.id)"
+            />
+        </div>
+        <div v-if="isLoading">Content is loading</div>
         <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="movies">
             <MovieCard
                 v-for="movie in movies"
@@ -40,11 +48,12 @@
     </section>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios'
 import MyButton from '../components/MyButton.vue'
 import MovieCard from '../components/MovieCard.vue'
 import HeroSlider from '../components/HeroSlider.vue'
+import CategoryTab from '../components/CategoryTab.vue'
 import { useMoviesStore } from '../stores/discoverMovies.ts'
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -53,16 +62,20 @@ export default {
     name: 'HomeView',
     setup() {
         const moviesStore = useMoviesStore()
-        const { movies, isloading, error } = storeToRefs(moviesStore)
+        const { movies, isLoading, error, categories, isLoadingCategories, errorCategories } = storeToRefs(moviesStore)
 
         onMounted(() => {
             moviesStore.fetchMovies()
+            moviesStore.fetchCategories()
         })
 
         return {
             movies,
-            isloading,
+            isLoading,
             error,
+            categories,
+            isLoadingCategories,
+            errorCategories,
         }
     },
     data() {
@@ -71,6 +84,7 @@ export default {
             errorBestMovies: null,
             topRatedMovies: null,
             errorTopRatedMovies: null,
+            selectedCategory: null,
         }
     },
     async created() {
@@ -84,6 +98,16 @@ export default {
                 return rootPath + this.bestMovies.poster_path
             } else {
                 return null
+            }
+        },
+        filteredMovies() {
+            if (!this.selectedCategory) {
+                return this.movies
+            } else {
+                console.log('CAT IN Filtered movies', this.selectedCategory)
+                const moviesFiltered = this.movies.filter((movie) => movie.genre_ids.includes(this.selectedCategory))
+                console.log('movies after filter', moviesFiltered)
+                return (this.movies = moviesFiltered)
             }
         },
     },
@@ -122,11 +146,17 @@ export default {
                 console.log(this.errorTopRatedMovies)
             }
         },
+        filterMoviesByCategory(id: Number) {
+            this.selectedCategory = id
+            console.log('ID selected', this.selectedCategory)
+            this.filteredMovies()
+        },
     },
     components: {
         MyButton,
         MovieCard,
         HeroSlider,
+        CategoryTab,
     },
 }
 </script>
