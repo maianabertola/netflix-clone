@@ -1,5 +1,5 @@
 <template>
-    <div class="p-3 rounded border-2 border-red-700 cursor-pointer text-center" @click="handleClick">
+    <div class="p-3 rounded border-2 border-red-700 active:bg-red-700 cursor-pointer text-center" @click="handleClick">
         {{ category }}
     </div>
 </template>

@@ -39,7 +39,7 @@
         <div v-if="isLoading">Content is loading</div>
         <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="movies">
             <MovieCard
-                v-for="movie in movies"
+                v-for="movie in moviesToDisplay"
                 :key="movie.id"
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
@@ -85,13 +85,19 @@ export default {
             topRatedMovies: null,
             errorTopRatedMovies: null,
             selectedCategory: null,
+            moviesToDisplay: [],
         }
     },
     async created() {
         await this.fetchBestMovies()
         await this.fetchTopRatedMovies()
+        await this.moviesCopy
     },
     computed: {
+        moviesCopy() {
+            return (this.moviesToDisplay = this.movies)
+        },
+
         moviePoster() {
             if (this.bestMovies) {
                 const rootPath = 'https://image.tmdb.org/t/p/original/'
@@ -102,12 +108,16 @@ export default {
         },
         filteredMovies() {
             if (!this.selectedCategory) {
-                return this.movies
+                return this.moviesToDisplay
             } else {
                 console.log('CAT IN Filtered movies', this.selectedCategory)
-                const moviesFiltered = this.movies.filter((movie) => movie.genre_ids.includes(this.selectedCategory))
+                this.moviesToDisplay = this.movies
+
+                const moviesFiltered = this.moviesToDisplay.filter((movie) =>
+                    movie.genre_ids.includes(this.selectedCategory),
+                )
                 console.log('movies after filter', moviesFiltered)
-                return (this.movies = moviesFiltered)
+                return (this.moviesToDisplay = moviesFiltered)
             }
         },
     },
@@ -149,7 +159,7 @@ export default {
         filterMoviesByCategory(id: Number) {
             this.selectedCategory = id
             console.log('ID selected', this.selectedCategory)
-            this.filteredMovies()
+            this.filteredMovies
         },
     },
     components: {
