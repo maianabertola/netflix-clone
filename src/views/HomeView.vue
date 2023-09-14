@@ -30,7 +30,7 @@
         <hr />
         <div class="grid grid-cols-6 row-auto gap-5" v-if="categories">
             <CategoryTab
-                v-for="category in categories"
+                v-for="category in categoriesToDisplay"
                 :category="category.name"
                 :key="category.id"
                 @click="() => filterMoviesByCategory(category.id)"
@@ -62,11 +62,14 @@ export default {
     name: 'HomeView',
     setup() {
         const moviesStore = useMoviesStore()
-        const { movies, isLoading, error, categories, isLoadingCategories, errorCategories } = storeToRefs(moviesStore)
+        const { movies, isLoading, error, categories, isLoadingCategories, errorCategories, categoriesToDisplay } =
+            storeToRefs(moviesStore)
+        console.log('categories to display', categoriesToDisplay)
 
         onMounted(() => {
             moviesStore.fetchMovies()
             moviesStore.fetchCategories()
+            moviesStore.filteredCategories
         })
 
         return {
@@ -76,6 +79,7 @@ export default {
             categories,
             isLoadingCategories,
             errorCategories,
+            categoriesToDisplay,
         }
     },
     data() {
@@ -110,13 +114,11 @@ export default {
             if (!this.selectedCategory) {
                 return this.moviesToDisplay
             } else {
-                console.log('CAT IN Filtered movies', this.selectedCategory)
                 this.moviesToDisplay = this.movies
 
                 const moviesFiltered = this.moviesToDisplay.filter((movie) =>
                     movie.genre_ids.includes(this.selectedCategory),
                 )
-                console.log('movies after filter', moviesFiltered)
                 return (this.moviesToDisplay = moviesFiltered)
             }
         },
@@ -132,10 +134,8 @@ export default {
                     },
                 })
                 this.bestMovies = response.data.results
-                //console.log('movies', this.bestMovies)
             } catch (error) {
                 this.errorBestMovies = error.message
-                //console.log(this.errorBestMovies)
             }
         },
         async fetchTopRatedMovies() {
@@ -158,7 +158,6 @@ export default {
         },
         filterMoviesByCategory(id: Number) {
             this.selectedCategory = id
-            console.log('ID selected', this.selectedCategory)
             this.filteredMovies
         },
     },
