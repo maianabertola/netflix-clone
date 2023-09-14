@@ -34,6 +34,7 @@
                 :category="category.name"
                 :key="category.id"
                 @click="() => filterMoviesByCategory(category.id)"
+                :isActive="category.isActive"
             />
         </div>
         <div v-if="isLoading">Content is loading</div>
@@ -65,7 +66,7 @@ export default {
         const moviesStore = useMoviesStore()
         const { movies, isLoading, error, categories, isLoadingCategories, errorCategories, categoriesToDisplay } =
             storeToRefs(moviesStore)
-
+        console.log('Cat', categoriesToDisplay.value)
         onMounted(() => {
             moviesStore.fetchMovies()
             moviesStore.fetchCategories()
@@ -161,10 +162,23 @@ export default {
         },
         filterMoviesByCategory(id: Number) {
             this.selectedCategory = id
-            console.log('empty state?', this.emptyMovie)
-            //this.emptyMovie = false
-
+            localStorage.setItem('activeCategory', this.selectedCategory)
+            this.savedCategory()
             this.filteredMovies
+        },
+
+        savedCategory() {
+            console.log('I AM IN SAVED CAT')
+            const savedCategory = localStorage.getItem('activeCategory')
+            this.categoriesToDisplay.map((category) => {
+                console.log('category', category)
+                if (category.id === parseInt(savedCategory)) {
+                    return (category.isActive = true)
+                } else {
+                    category.isActive = false
+                }
+            })
+            console.log('cat after click', this.categoriesToDisplay)
         },
     },
     components: {

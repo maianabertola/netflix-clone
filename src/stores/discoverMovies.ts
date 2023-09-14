@@ -15,7 +15,14 @@ export const useMoviesStore = defineStore({
     getters: {
         filteredCategories() {
             const selectedCategories = ['All', 'Action', 'Documentary', 'Animation', 'Adventure', 'Comedy']
-            this.categoriesToDisplay = this.categories.filter((category) => selectedCategories.includes(category.name))
+            this.categoriesToDisplay = this.categories
+                .filter((category) => selectedCategories.includes(category.name))
+                .map((category) => {
+                    return {
+                        ...category,
+                        isActive: false,
+                    }
+                })
             return this.categoriesToDisplay.sort((a, b) => a.id - b.id)
         },
     },
