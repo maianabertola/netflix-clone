@@ -132,7 +132,6 @@
 
 <script lang="ts">
 import MyButton from './MyButton.vue'
-import 'tw-elements'
 
 export default {
     name: 'HeroSlider',
@@ -141,7 +140,6 @@ export default {
     },
     methods: {
         navToMovieDetails(id: Number) {
-            console.log('id', id)
             this.$emit('click')
             this.$router.push(`/movie-details/${id}`)
         },

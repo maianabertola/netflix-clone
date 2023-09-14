@@ -66,7 +66,6 @@ export default {
         const moviesStore = useMoviesStore()
         const { movies, isLoading, error, categories, isLoadingCategories, errorCategories, categoriesToDisplay } =
             storeToRefs(moviesStore)
-        console.log('Cat', categoriesToDisplay.value)
         onMounted(() => {
             moviesStore.fetchMovies()
             moviesStore.fetchCategories()
@@ -168,17 +167,14 @@ export default {
         },
 
         savedCategory() {
-            console.log('I AM IN SAVED CAT')
             const savedCategory = localStorage.getItem('activeCategory')
             this.categoriesToDisplay.map((category) => {
-                console.log('category', category)
                 if (category.id === parseInt(savedCategory)) {
                     return (category.isActive = true)
                 } else {
                     category.isActive = false
                 }
             })
-            console.log('cat after click', this.categoriesToDisplay)
         },
     },
     components: {
