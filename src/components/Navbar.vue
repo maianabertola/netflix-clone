@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <nav class="w-full fixed top-0 left-0 right-0 p-5 z-100" :class="{ changeBackground: scrollPosition > 50 }">
+        <nav class="w-full fixed top-0 left-0 right-0 p-5 z-50" :class="{ changeBackground: scrollPosition > 50 }">
             <div class="flex justify-between">
                 <div>
                     <RouterLink to="/"><img src="../assets/logo.png" alt="Netflix logo" /></RouterLink>

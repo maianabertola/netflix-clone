@@ -11,18 +11,27 @@
     </section>
 
     <!-- TOP 4 MOVIES -->
-    <section>
+    <section class="relative">
         <div class="titleSection">
             <h1>Best movies of the month</h1>
             <hr />
         </div>
-        <div class="grid grid-cols-4 grid-rows-1 gap-3" v-if="bestMovies">
+
+        <div class="grid grid-cols-4 grid-rows-1 gap-20 z-10 px-10 max-w-200px" v-if="bestMovies">
             <MovieCard
                 v-for="movie in bestMovies"
                 :key="movie.id"
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
+                class="pl-12"
             />
+        </div>
+        <div
+            class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 -mb-6 absolute -translate-y-[32rem] -translate-x-1 gap-12"
+        >
+            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700">
+                {{ number }}
+            </div>
         </div>
     </section>
 
@@ -95,6 +104,7 @@ export default {
             selectedCategory: null,
             moviesToDisplay: [],
             emptyMovie: false,
+            topMovies: [1, 2, 3, 4],
         }
     },
     async created() {
