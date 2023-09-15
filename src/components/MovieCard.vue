@@ -1,18 +1,24 @@
 <template>
-    <a href="#" class="group">
-        <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+    <div>
+        <RouterLink to="/">
+            <div
+                class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
+            >
+                <img
+                    :alt="title"
+                    :src="moviePoster"
+                    class="h-full w-full object-cover object-center group-hover:opacity-75"
+                />
+            </div>
+        </RouterLink>
+        <div class="flex flex-row justify-between content-center py-3 px-1">
+            <h3>{{ title }}</h3>
             <FavoriteIcon></FavoriteIcon>
-            <img
-                v-bind:alt="title"
-                v-bind:src="moviePoster"
-                class="h-full w-full object-cover object-center group-hover:opacity-75"
-            />
         </div>
-        <h3 class="mt-4 text-sm">{{ title }}</h3>
-    </a>
+    </div>
 </template>
 
-<script>
+<script lang="ts">
 import FavoriteIcon from './icons/FavoriteIcon.vue'
 
 export default {

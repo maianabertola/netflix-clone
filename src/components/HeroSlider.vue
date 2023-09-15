@@ -34,13 +34,13 @@
         <div class="relative w-full overflow-hidden after:clear-both after:block after:content-['']">
             <!--First item-->
             <div
-                class="relative float-left -mr-[100%] w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none h-[80vh] brightness-50"
+                class="relative float-left -mr-[100%] w-full transition-transform duration-[600ms] ease-in-out motion-reduce:transition-none h-[80vh] brightness-50 z-0"
                 data-te-carousel-active
                 data-te-carousel-item
                 style="backface-visibility: hidden"
                 :key="id"
             >
-                <img :src="moviePoster" class="block w-full h-full object-cover" alt="..." />
+                <img :src="moviePoster" class="block w-full h-full object-cover" :alt="title" />
             </div>
             <div class="absolute top-10 left-10 z-10 p-50 w-3/5">
                 <h1>Must see</h1>

@@ -8,7 +8,8 @@ export const useFavoriteStore = defineStore({
         isLoading: false,
         error: null,
         token: null,
-        userID: null,
+        approvedToken: null,
+        requestToken: null,
     }),
     getters: {},
     actions: {
@@ -22,37 +23,66 @@ export const useFavoriteStore = defineStore({
                     },
                 })
                 this.token = response.data.request_token
-                console.log('TOKEN STORE', typeof this.token, this.token)
             } catch (error) {
                 this.error = error
             }
         },
-        async createSession(token: String) {
-            window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:5173/favorite-movies`
-            const params = new URLSearchParams(window.location.search)
-        },
-        handleReturnedToken() {
-            const params = new URLSearchParams(window.location.search)
-            const token = params.get('request_token')
 
-            if (token) {
-                this.userID = token
-                localStorage.setItem('userID', this.userID)
-                console.log('USERID', this.userID)
-                this.createUserID()
+        async createApprovedToken(token: String) {
+            window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:5173/favorite-movies`
+        },
+
+        handleReturnedToken() {
+            console.log('JE SUIS DANS HANDLE POUR RETOURNER LE TOKEN')
+
+            const params = new URLSearchParams(window.location.search)
+            const secondToken = params.get('request_token')
+            this.approvedToken = secondToken
+            localStorage.setItem('token approved', this.approvedToken)
+            console.log('token approved', this.approvedToken)
+
+            if (this.approvedToken) {
+                console.log('IN APPROVED TOKEN')
+                const lastToken = localStorage.getItem('request_token')
+                this.requestToken = lastToken
+                console.log('request token', this.requestToken)
+                this.createSession()
+            } else {
+                return null
             }
         },
-        async createUserID() {
-            const response = await axios.post('https://api.themoviedb.org/3/authentication/session/new', {
+
+        async createSession() {
+            // const response = await axios.post('https://api.themoviedb.org/3/authentication/session/new', {
+            //     headers: {
+            //         accept: 'application/json',
+            //         'content-type': 'application/json',
+            //         Authorization:
+            //             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+            //     },
+            //     body: this.tokenApproved,
+            // })
+            // console.log('ID session', response.data)
+
+            const requestBody = {
+                request_token: this.requestToken, // your approved token
+            }
+
+            const options = {
+                method: 'POST',
                 headers: {
                     accept: 'application/json',
                     'content-type': 'application/json',
                     Authorization:
-                        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
                 },
-            })
+                body: JSON.stringify(requestBody),
+            }
 
-            console.log('ID session', response.data)
+            fetch('https://api.themoviedb.org/3/authentication/session/new', options)
+                .then((response) => response.json())
+                .then((response) => console.log(response))
+                .catch((err) => console.error(err))
         },
         async fetchFavorite() {
             this.isLoading = true

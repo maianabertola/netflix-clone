@@ -2,7 +2,7 @@
     <button
         type="button"
         role="link"
-        class="py-1 px-5 bg-red-700 rounded hover:bg-opacity-80 cursor-pointer"
+        class="py-2 px-6 bg-red-700 rounded hover:bg-opacity-80 cursor-pointer"
         @click="handleClick"
     >
         {{ cta }}

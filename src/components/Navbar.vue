@@ -1,27 +1,42 @@
 <template>
-    <nav class="w-full sticky top-0 p-5 z-100">
-        <div class="flex justify-between">
-            <div>
-                <RouterLink to="/"><img src="../assets/logo.png" alt="netflix logo" /></RouterLink>
+    <div class="relative">
+        <nav class="w-full fixed top-0 left-0 right-0 p-5 z-100" :class="{ changeBackground: scrollPosition > 50 }">
+            <div class="flex justify-between">
+                <div>
+                    <RouterLink to="/"><img src="../assets/logo.png" alt="Netflix logo" /></RouterLink>
+                </div>
+                <ul class="flex flex-row gap-10 content-center items-center">
+                    <RouterLink to="/"><li>Homepage</li></RouterLink>
+                    <RouterLink to="/all-movies"> <li>Movies</li></RouterLink>
+                    <RouterLink to="/favorite-movies"> <li>Favorite</li></RouterLink>
+                    <RouterLink to="/about"> <li>About</li></RouterLink>
+                </ul>
             </div>
-            <ul class="flex flex-row gap-10 content-center items-center">
-                <RouterLink to="/"><li>Homepage</li></RouterLink>
-                <RouterLink to="/"> <li>Movies</li></RouterLink>
-                <RouterLink to="/favorite-movies"> <li>Favorite</li></RouterLink>
-                <RouterLink to="/"> <li>About</li></RouterLink>
-            </ul>
-        </div>
-    </nav>
+        </nav>
+    </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
     name: 'Navbar',
     data() {
-        return {}
+        return {
+            scrollPosition: null,
+        }
     },
-    methods: {},
+    methods: {
+        updateScroll() {
+            this.scrollPosition = window.scrollY
+        },
+    },
+    mounted() {
+        window.addEventListener('scroll', this.updateScroll)
+    },
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.changeBackground {
+    background-color: hsla(0, 3%, 13%, 0.418);
+}
+</style>

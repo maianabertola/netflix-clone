@@ -1,32 +1,4 @@
 <template>
-    <!-- HERO SECTION -->
-    <section v-if="topRatedMovies" class="p-0">
-        <HeroSlider
-            v-if="topRatedMovies"
-            :title="topRatedMovies[0].title"
-            :posterPath="topRatedMovies[0].poster_path"
-            :description="topRatedMovies[0].overview"
-            :id="topRatedMovies[0].id"
-        ></HeroSlider>
-    </section>
-
-    <!-- TOP 4 MOVIES -->
-    <section>
-        <div class="titleSection">
-            <h1>Best movies of the month</h1>
-            <hr />
-        </div>
-        <div class="grid grid-cols-4 grid-rows-1 gap-3" v-if="bestMovies">
-            <MovieCard
-                v-for="movie in bestMovies"
-                :key="movie.id"
-                :title="movie.original_title"
-                :moviePosterPath="movie.poster_path"
-            />
-        </div>
-    </section>
-
-    <!-- MOVIES BY CATEGORIES -->
     <section>
         <div class="titleSection">
             <h1>Discover our movies</h1>
@@ -131,38 +103,6 @@ export default {
         },
     },
     methods: {
-        async fetchBestMovies() {
-            try {
-                const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
-                    headers: {
-                        accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                    },
-                })
-                this.bestMovies = response.data.results.splice(0, 4)
-            } catch (error) {
-                this.errorBestMovies = error.message
-            }
-        },
-        async fetchTopRatedMovies() {
-            try {
-                const response = await axios.get('https://api.themoviedb.org/3/movie/top_rated', {
-                    headers: {
-                        accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                    },
-                    params: {
-                        page: 1,
-                    },
-                })
-                this.topRatedMovies = response.data.results
-            } catch (error) {
-                this.errorTopRatedMovies = error
-                console.log(this.errorTopRatedMovies)
-            }
-        },
         filterMoviesByCategory(id: Number) {
             this.selectedCategory = id
             localStorage.setItem('activeCategory', this.selectedCategory)

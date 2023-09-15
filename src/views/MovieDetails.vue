@@ -1,7 +1,7 @@
 <template>
     <div v-if="movieId && movieDetails">
         <div class="brightness-80">
-            <img :src="movieBackDrop" />
+            <img :src="movieBackDrop" :alt="this.movieDetails.title" />
         </div>
         <div class="grid grid-cols-3 gap-4 grid-row-5 p-5">
             <div class="col-span-3">
