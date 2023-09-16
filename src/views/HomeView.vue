@@ -24,6 +24,7 @@
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
                 class="pl-12"
+                :rating="movie.vote_average"
             />
         </div>
         <div
@@ -58,6 +59,7 @@
                 :key="movie.id"
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
+                :rating="movie.vote_average"
             />
         </div>
     </section>
@@ -168,6 +170,7 @@ export default {
                     },
                 })
                 this.topRatedMovies = response.data.results
+                console.log(this.topRatedMovies)
             } catch (error) {
                 this.errorTopRatedMovies = error
                 console.log(this.errorTopRatedMovies)

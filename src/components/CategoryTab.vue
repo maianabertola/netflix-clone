@@ -1,6 +1,6 @@
 <template>
     <div
-        class="p-3 rounded border-2 border-red-700 cursor-pointer text-center"
+        class="p-3 rounded border-2 border-red-700 cursor-pointer text-center hover:bg-red-700"
         :class="{ active: isActive }"
         @click="handleClick"
     >
@@ -8,7 +8,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
     name: 'CategoryTab',
     data() {

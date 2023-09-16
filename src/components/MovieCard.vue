@@ -12,14 +12,16 @@
             </div>
         </RouterLink>
         <div class="flex flex-row justify-between content-center py-3 px-1">
-            <h3>{{ title }}</h3>
-            <FavoriteIcon></FavoriteIcon>
+            <!-- <h3>{{ title }}</h3> -->
+            <Rating :rating="rating"></Rating>
+            <FavoriteIcon :movieId="movieId"></FavoriteIcon>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import FavoriteIcon from './icons/FavoriteIcon.vue'
+import Rating from './Rating.vue'
 
 export default {
     name: '',
@@ -29,6 +31,7 @@ export default {
     methods: {},
     components: {
         FavoriteIcon,
+        Rating,
     },
     props: {
         title: {
@@ -37,6 +40,14 @@ export default {
         },
         moviePosterPath: {
             type: String,
+            required: true,
+        },
+        movieId: {
+            type: String,
+            required: false,
+        },
+        rating: {
+            type: Number,
             required: true,
         },
     },

@@ -5,90 +5,97 @@ export const useFavoriteStore = defineStore({
     id: 'favoriteMovies',
     state: () => ({
         favoriteMovies: [],
-        isLoading: false,
-        error: null,
+        isLoadingFetchFavorite: false,
+        errorFetchFavorite: null,
         token: null,
-        approvedToken: null,
-        requestToken: null,
+        requestToken: '',
+        accountId: null,
+        accessToken: null,
+        errorAddFavorite: null,
+        errorDeleteFavorite: null,
     }),
     getters: {},
     actions: {
         async createToken() {
             try {
-                const response = await axios.get('https://api.themoviedb.org/3/authentication/token/new', {
-                    headers: {
-                        accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                const response = await axios.post(
+                    'https://api.themoviedb.org/4/auth/request_token',
+                    {
+                        redirect_to: 'http://localhost:5173/token-created',
                     },
-                })
-                this.token = response.data.request_token
+                    {
+                        headers: {
+                            accept: 'application/json',
+                            'content-type': 'application/json',
+                            Authorization:
+                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        },
+                    },
+                )
+
+                this.requestToken = response.data.request_token
+                localStorage.setItem('request token', this.requestToken)
+                this.approveRequestToken()
             } catch (error) {
-                this.error = error
+                console.error(error)
             }
         },
 
-        async createApprovedToken(token: String) {
-            window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:5173/favorite-movies`
+        async approveRequestToken() {
+            window.open(`https://www.themoviedb.org/auth/access?request_token=${this.requestToken}`, 'blank')
         },
 
-        handleReturnedToken() {
-            console.log('JE SUIS DANS HANDLE POUR RETOURNER LE TOKEN')
-
-            const params = new URLSearchParams(window.location.search)
-            const secondToken = params.get('request_token')
-            this.approvedToken = secondToken
-            localStorage.setItem('token approved', this.approvedToken)
-            console.log('token approved', this.approvedToken)
-
-            if (this.approvedToken) {
-                console.log('IN APPROVED TOKEN')
-                const lastToken = localStorage.getItem('request_token')
-                this.requestToken = lastToken
-                console.log('request token', this.requestToken)
-                this.createSession()
-            } else {
-                return null
+        async getAccessToken() {
+            try {
+                const response = await axios.post(
+                    'https://api.themoviedb.org/4/auth/access_token',
+                    { request_token: this.requestToken },
+                    {
+                        headers: {
+                            accept: 'application/json',
+                            'content-type': 'application/json',
+                            Authorization:
+                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        },
+                    },
+                )
+                console.log('RES GET ACCESS TOKEN', response.data)
+                this.accountId = response.data.account_id
+                localStorage.setItem('account Id', this.accountId)
+                this.accessToken = response.data.access_token
+                localStorage.setItem('access Token', this.accessToken)
+            } catch (error) {
+                console.log('Error in getAccessToken', error)
             }
         },
 
         async createSession() {
-            // const response = await axios.post('https://api.themoviedb.org/3/authentication/session/new', {
-            //     headers: {
-            //         accept: 'application/json',
-            //         'content-type': 'application/json',
-            //         Authorization:
-            //             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-            //     },
-            //     body: this.tokenApproved,
-            // })
-            // console.log('ID session', response.data)
-
-            const requestBody = {
-                request_token: this.requestToken, // your approved token
-            }
-
             const options = {
                 method: 'POST',
+                url: 'https://api.themoviedb.org/3/authentication/session/convert/4',
                 headers: {
                     accept: 'application/json',
                     'content-type': 'application/json',
                     Authorization:
-                        'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
                 },
-                body: JSON.stringify(requestBody),
+                data: this.accessToken,
             }
 
-            fetch('https://api.themoviedb.org/3/authentication/session/new', options)
-                .then((response) => response.json())
-                .then((response) => console.log(response))
-                .catch((err) => console.error(err))
+            axios
+                .request(options)
+                .then(function (response) {
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.error(error)
+                })
         },
         async fetchFavorite() {
-            this.isLoading = true
+            this.isLoadingFetchFavorite = true
             try {
                 const response = await axios.get(
-                    'https://api.themoviedb.org/3/account/MaianaB/favorite/tv?language=en-US&page=1&sort_by=created_at.asc',
+                    `https://api.themoviedb.org/4/account/${this.accountId}/movie/favorites`,
                     {
                         headers: {
                             accept: 'application/json',
@@ -99,18 +106,50 @@ export const useFavoriteStore = defineStore({
                 )
                 this.favoriteMovies = response.data.results
                 console.log('fav', this.favoriteMovies)
-                this.isLoading = false
+                this.isLoadingFetchFavorite = false
             } catch (error) {
-                this.error = error
+                this.errorFetchFavorite = error
                 console.log('error', error)
-            } finally {
-                this.isloading = false
             }
         },
-
-        async addFavorite() {
+        async addFavorite(movieId: Number) {
+            // try {
+            //     console.log('I AM HERE IN ADD')
+            //     const id = localStorage.getItem('account Id')
+            //     this.accountId = id
+            //     console.log('accound ID', this.accountId)
+            //     const response = await axios.post(
+            //         `https://api.themoviedb.org/3/account/${this.accountId}/favorite`,
+            //         { media_type: 'movie', media_id: { movieId }, favorite: true },
+            //         {
+            //             headers: {
+            //                 accept: 'application/json',
+            //                 Authorization:
+            //                     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+            //             },
+            //         },
+            //     )
+            //     console.log('Success in adding a new movie as favorite', response.data)
+            // } catch (error) {
+            //     this.errorAddFavorite = error
+            //     console.log(this.errorAddFavorite)
+            // }
+            this.favoriteMovies.push(movieId)
+        },
+        async deleteFavorite(movieId: Number) {
             try {
-            } catch (error) {}
+                const response = await axios.post(`https://api.themoviedb.org/3/account/${this.accountId}/favorite`, {
+                    headers: {
+                        accept: 'application/json',
+                        Authorization:
+                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                    },
+                    body: JSON.stringify({ media_type: 'movie', media_id: { movieId }, favorite: false }),
+                })
+                console.log('Success in adding a new movie as favorite', response.data)
+            } catch (error) {
+                this.errorDeleteFavorite = error
+            }
         },
     },
 })

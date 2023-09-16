@@ -17,9 +17,27 @@
     </svg>
 </template>
 
-<script>
+<script lang="ts">
+import { useFavoriteStore } from '@/stores/favoriteMovies'
+
 export default {
     name: 'FavoriteIcon',
+    setup() {
+        const favoriteStore = useFavoriteStore()
+
+        const addFavorite = () => {
+            favoriteStore.addFavorite()
+        }
+
+        const deleteFavorite = () => {
+            favoriteStore.deleteFavorite()
+        }
+
+        return {
+            addFavorite,
+            deleteFavorite,
+        }
+    },
     data() {
         return {
             isClicked: false,
@@ -29,6 +47,15 @@ export default {
         handleClick() {
             this.$emit('click')
             this.isClicked = !this.isClicked
+
+            if (this.isClicked === false) {
+                this.addFavorite()
+                console.log("It's been addded!")
+            }
+
+            if (this.isClicked === true) {
+                this.deleteFavorite()
+            }
         },
     },
 }

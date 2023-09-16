@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import MovieDetails from '../views/MovieDetails.vue'
 import FavoriteView from '../views/FavoriteView.vue'
 import AllMovies from '../views/AllMovies.vue'
+import Confirmation from '../views/ConfirmationView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
             path: '/all-movies',
             name: 'all movies',
             component: AllMovies,
+        },
+        {
+            path: '/token-created',
+            name: 'token created',
+            component: Confirmation,
         },
         {
             path: '/about',
