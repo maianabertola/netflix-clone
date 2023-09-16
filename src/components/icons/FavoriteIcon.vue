@@ -5,7 +5,9 @@
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="w-6 h-6"
+        class="w-6 h-6 hover:scale-75 transition ease-in-out cursor-pointer active:fill-red-500"
+        @click="handleClick"
+        :style="{ fill: isClicked ? 'red' : 'initial' }"
     >
         <path
             stroke-linecap="round"
@@ -19,9 +21,16 @@
 export default {
     name: 'FavoriteIcon',
     data() {
-        return {}
+        return {
+            isClicked: false,
+        }
     },
-    methods: {},
+    methods: {
+        handleClick() {
+            this.$emit('click')
+            this.isClicked = !this.isClicked
+        },
+    },
 }
 </script>
 

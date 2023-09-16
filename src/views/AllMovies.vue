@@ -27,12 +27,11 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios'
 import MyButton from '../components/MyButton.vue'
 import MovieCard from '../components/MovieCard.vue'
 import HeroSlider from '../components/HeroSlider.vue'
 import CategoryTab from '../components/CategoryTab.vue'
-import { useMoviesStore } from '../stores/discoverMovies.ts'
+import { useMoviesStore } from '../stores/discoverMovies'
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
@@ -70,8 +69,6 @@ export default {
         }
     },
     async created() {
-        await this.fetchBestMovies()
-        await this.fetchTopRatedMovies()
         await this.moviesCopy
     },
     computed: {
