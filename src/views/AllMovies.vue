@@ -21,6 +21,9 @@
                 :key="movie.id"
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
+                :rating="movie.vote_average"
+                :movieId="movie.id"
+                :mediaType="moviesType"
             />
         </div>
     </section>
@@ -66,6 +69,7 @@ export default {
             selectedCategory: null,
             moviesToDisplay: [],
             emptyMovie: false,
+            moviesType: 'movie',
         }
     },
     async created() {

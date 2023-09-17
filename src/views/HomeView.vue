@@ -25,12 +25,14 @@
                 :moviePosterPath="movie.poster_path"
                 class="pl-12"
                 :rating="movie.vote_average"
+                :movieId="movie.id"
+                :mediaType="moviesType"
             />
         </div>
         <div
-            class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 -mb-6 absolute -translate-y-[32rem] -translate-x-1 gap-12"
+            class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 absolute -translate-y-[32rem] gap-40 -translate-x-8 numbers"
         >
-            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700">
+            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700 mr-3">
                 {{ number }}
             </div>
         </div>
@@ -60,6 +62,8 @@
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
                 :rating="movie.vote_average"
+                :movieId="movie.id"
+                :mediaType="moviesType"
             />
         </div>
     </section>
@@ -107,6 +111,7 @@ export default {
             moviesToDisplay: [],
             emptyMovie: false,
             topMovies: [1, 2, 3, 4],
+            moviesType: 'movie',
         }
     },
     async created() {
@@ -116,6 +121,7 @@ export default {
     },
     computed: {
         moviesCopy() {
+            console.log('MOVIES', this.movies)
             return (this.moviesToDisplay = this.movies)
         },
 

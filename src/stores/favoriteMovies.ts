@@ -4,82 +4,67 @@ import axios from 'axios'
 export const useFavoriteStore = defineStore({
     id: 'favoriteMovies',
     state: () => ({
+        movieListId: null,
         favoriteMovies: [],
         isLoadingFetchFavorite: false,
         errorFetchFavorite: null,
-        token: null,
-        requestToken: '',
-        accountId: null,
-        accessToken: null,
         errorAddFavorite: null,
         errorDeleteFavorite: null,
     }),
     getters: {},
     actions: {
-        async createToken() {
+        async fetchFavorite() {
+            this.isLoadingFetchFavorite = true
             try {
-                const response = await axios.post(
-                    'https://api.themoviedb.org/4/auth/request_token',
-                    {
-                        redirect_to: 'http://localhost:5173/token-created',
+                const response = await axios.get(`https://api.themoviedb.org/4/list/${this.movieListId}`, {
+                    headers: {
+                        accept: 'application/json',
+                        Authorization:
+                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
                     },
-                    {
-                        headers: {
-                            accept: 'application/json',
-                            'content-type': 'application/json',
-                            Authorization:
-                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                        },
-                    },
-                )
-
-                this.requestToken = response.data.request_token
-                localStorage.setItem('request token', this.requestToken)
-                this.approveRequestToken()
+                })
+                this.favoriteMovies = response.data.results
+                console.log('fav', this.favoriteMovies)
+                this.isLoadingFetchFavorite = false
             } catch (error) {
-                console.error(error)
+                this.errorFetchFavorite = error
+                console.log('error', error)
             }
         },
+        async addFavorite(movieId: Number, mediaType: String) {
+            const movieList = localStorage.getItem('movieListId')
+            this.movieListId = movieList
 
-        async approveRequestToken() {
-            window.open(`https://www.themoviedb.org/auth/access?request_token=${this.requestToken}`, 'blank')
-        },
+            // try {
+            //     const response = await axios.post(
+            //         `https://api.themoviedb.org/4/${this.movieListId}/items`,
 
-        async getAccessToken() {
-            try {
-                const response = await axios.post(
-                    'https://api.themoviedb.org/4/auth/access_token',
-                    { request_token: this.requestToken },
-                    {
-                        headers: {
-                            accept: 'application/json',
-                            'content-type': 'application/json',
-                            Authorization:
-                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                        },
-                    },
-                )
-                console.log('RES GET ACCESS TOKEN', response.data)
-                this.accountId = response.data.account_id
-                localStorage.setItem('account Id', this.accountId)
-                this.accessToken = response.data.access_token
-                localStorage.setItem('access Token', this.accessToken)
-            } catch (error) {
-                console.log('Error in getAccessToken', error)
-            }
-        },
+            //         { items: [{ media_type: mediaType, media_id: movieId }] },
+            //         {
+            //             headers: {
+            //                 accept: 'application/json',
+            //                 Authorization:
+            //                     'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
+            //             },
+            //         },
+            //     )
+            //     console.log('Success', response.data)
+            // } catch (error) {
+            //     console.log(error)
+            // }
 
-        async createSession() {
             const options = {
                 method: 'POST',
-                url: 'https://api.themoviedb.org/3/authentication/session/convert/4',
+                url: `https://api.themoviedb.org/4/list/${this.movieListId}/items`,
                 headers: {
                     accept: 'application/json',
                     'content-type': 'application/json',
                     Authorization:
-                        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
                 },
-                data: this.accessToken,
+                data: {
+                    items: [{ media_type: mediaType, media_id: movieId }],
+                },
             }
 
             axios
@@ -91,65 +76,50 @@ export const useFavoriteStore = defineStore({
                     console.error(error)
                 })
         },
-        async fetchFavorite() {
-            this.isLoadingFetchFavorite = true
-            try {
-                const response = await axios.get(
-                    `https://api.themoviedb.org/4/account/${this.accountId}/movie/favorites`,
-                    {
-                        headers: {
-                            accept: 'application/json',
-                            Authorization:
-                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                        },
-                    },
-                )
-                this.favoriteMovies = response.data.results
-                console.log('fav', this.favoriteMovies)
-                this.isLoadingFetchFavorite = false
-            } catch (error) {
-                this.errorFetchFavorite = error
-                console.log('error', error)
-            }
-        },
-        async addFavorite(movieId: Number) {
+        async deleteFavorite(movieId: Number, mediaType: String) {
+            const movieList = localStorage.getItem('movieListId')
+            this.movieListId = movieList
+
             // try {
-            //     console.log('I AM HERE IN ADD')
-            //     const id = localStorage.getItem('account Id')
-            //     this.accountId = id
-            //     console.log('accound ID', this.accountId)
             //     const response = await axios.post(
-            //         `https://api.themoviedb.org/3/account/${this.accountId}/favorite`,
-            //         { media_type: 'movie', media_id: { movieId }, favorite: true },
+            //         `https://api.themoviedb.org/4/${this.movieListId}/items`,
+
+            //         { items: [{ media_type: mediaType, media_id: movieId }] },
             //         {
             //             headers: {
             //                 accept: 'application/json',
             //                 Authorization:
-            //                     'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+            //                     'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
             //             },
             //         },
             //     )
-            //     console.log('Success in adding a new movie as favorite', response.data)
+            //     console.log('Success', response.data)
             // } catch (error) {
-            //     this.errorAddFavorite = error
-            //     console.log(this.errorAddFavorite)
+            //     console.log(error)
             // }
-            this.favoriteMovies.push(movieId)
-        },
-        async deleteFavorite(movieId: Number) {
-            try {
-                const response = await axios.post(`https://api.themoviedb.org/3/account/${this.accountId}/favorite`, {
-                    headers: {
-                        accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                    },
-                    body: JSON.stringify({ media_type: 'movie', media_id: { movieId }, favorite: false }),
-                })
-                console.log('Success in adding a new movie as favorite', response.data)
-            } catch (error) {
-                this.errorDeleteFavorite = error
+
+            const options = {
+                method: 'DELETE',
+                url: `https://api.themoviedb.org/4/list/${this.movieListId}/items`,
+                headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    Authorization:
+                        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
+                },
+                data: {
+                    items: [{ media_type: mediaType, media_id: movieId }],
+                },
             }
+
+            axios
+                .request(options)
+                .then(function (response) {
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.error(error)
+                })
         },
     },
 })

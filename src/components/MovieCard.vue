@@ -14,7 +14,7 @@
         <div class="flex flex-row justify-between content-center py-3 px-1">
             <!-- <h3>{{ title }}</h3> -->
             <Rating :rating="rating"></Rating>
-            <FavoriteIcon :movieId="movieId"></FavoriteIcon>
+            <FavoriteIcon :movieId="movieId" :mediaType="mediaType"></FavoriteIcon>
         </div>
     </div>
 </template>
@@ -24,7 +24,7 @@ import FavoriteIcon from './icons/FavoriteIcon.vue'
 import Rating from './Rating.vue'
 
 export default {
-    name: '',
+    name: 'MovieCard',
     data() {
         return {}
     },
@@ -43,8 +43,12 @@ export default {
             required: true,
         },
         movieId: {
+            type: Number,
+            required: true,
+        },
+        mediaType: {
             type: String,
-            required: false,
+            required: true,
         },
         rating: {
             type: Number,

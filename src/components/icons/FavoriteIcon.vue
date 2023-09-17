@@ -25,12 +25,12 @@ export default {
     setup() {
         const favoriteStore = useFavoriteStore()
 
-        const addFavorite = () => {
-            favoriteStore.addFavorite()
+        const addFavorite = (movieId, mediaType) => {
+            favoriteStore.addFavorite(movieId, mediaType)
         }
 
-        const deleteFavorite = () => {
-            favoriteStore.deleteFavorite()
+        const deleteFavorite = (movieId, mediaType) => {
+            favoriteStore.deleteFavorite(movieId, mediaType)
         }
 
         return {
@@ -46,16 +46,28 @@ export default {
     methods: {
         handleClick() {
             this.$emit('click')
-            this.isClicked = !this.isClicked
 
             if (this.isClicked === false) {
-                this.addFavorite()
-                console.log("It's been addded!")
-            }
+                this.addFavorite(this.movieId, this.mediaType)
+                console.log('movieId', this.movieId, 'media type', this.mediaType)
 
-            if (this.isClicked === true) {
-                this.deleteFavorite()
+                console.log("It's been addded!")
+                this.isClicked = true
+            } else {
+                this.deleteFavorite(this.movieId, this.mediaType)
+                console.log("It's been removed!")
+                this.isClicked = false
             }
+        },
+    },
+    props: {
+        movieId: {
+            type: Number,
+            required: true,
+        },
+        mediaType: {
+            type: String,
+            required: true,
         },
     },
 }

@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div v-if="!requestToken">
+        <div v-if="!isConnected && !requestToken">
             <div
                 class="w-full h-[100vh] pt-[3vh]"
                 :style="{
@@ -37,17 +37,78 @@
             </div>
         </div>
 
-        <div v-if="accountId">
+        <div v-if="isConnected">
             <div class="titleSection">
                 <h1>Favorite Movies</h1>
                 <hr />
             </div>
-            <h3>Acound Id: {{ accountId }}</h3>
-            <MyButton cta="Display your favorite movies" @click="() => this.fetchFavorite()"></MyButton>
-            <div v-if="!favoriteMovies.length">
-                Your list is empty. <RouterLink to="/all-movies">Discover our movies to add them.</RouterLink>
+            <div class="flex flex-row justify-between">
+                <h3>Acound Id: {{ accountId }}</h3>
             </div>
-            <div v-if="favoriteMovies.length > 1">This is your list {{ favoriteMovies }}</div>
+            <div v-if="!movieListId">
+                <form @submit.prevent="createList">
+                    <div>
+                        <label>List name</label>
+                        <input
+                            id="name"
+                            type="text"
+                            name="name"
+                            v-model="nameList"
+                            placeholder="Name your list of favorite movies"
+                            class="text-black"
+                        />
+                        {{ nameList }}
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <input
+                            id="description"
+                            type="textaera"
+                            name="description"
+                            v-model="description"
+                            placeholder="Few words about your list"
+                            class="text-black"
+                        />
+                        {{ description }}
+                    </div>
+                    <div>
+                        <label
+                            >Private List
+                            <input
+                                id="privateList"
+                                type="checkbox"
+                                name="privateList"
+                                v-model="privateList"
+                                placeholder="Few words about your list"
+                            />
+                        </label>
+                        {{ privateList }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Click me</button>
+                </form>
+            </div>
+            <div v-if="movieListId">
+                <MyButton cta="click to fetch" @click="() => this.fetchFavorite()"></MyButton>
+
+                <div v-if="!favoriteMovies.length">
+                    <p>
+                        Your list is empty. <RouterLink to="/all-movies">Discover our movies to add them.</RouterLink>
+                    </p>
+                </div>
+                <div v-if="favoriteMovies.length > 1">
+                    <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="favoriteMovies">
+                        <MovieCard
+                            v-for="movie in favoriteMovies"
+                            :key="movie.id"
+                            :title="movie.original_title"
+                            :moviePosterPath="movie.poster_path"
+                            :rating="movie.vote_average"
+                            :movieId="movie.id"
+                            :mediaType="moviesType"
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- <MyButton cta="Create session" @click="() => this.createSession()"></MyButton>> -->
@@ -56,23 +117,24 @@
 
 <script lang="ts">
 import { useFavoriteStore } from '../stores/favoriteMovies.ts'
-import { onMounted } from 'vue'
+import { useAuthStore } from '../stores/authStore'
 import { storeToRefs } from 'pinia'
 import MyButton from '../components/MyButton.vue'
+import axios from 'axios'
+import { onMounted } from 'vue'
+import MovieCard from '@/components/MovieCard.vue'
 
 export default {
     name: 'FavoriteView',
     setup() {
         const favoriteStore = useFavoriteStore()
-        const { favoriteMovies, isLoadingFetchFavorite, errorFetchFavorite, token, requestToken, accountId } =
-            storeToRefs(favoriteStore)
-
-        // when the DOM is mounted, these lines of code will be executed
-        onMounted(() => {})
+        const authStore = useAuthStore()
+        const { favoriteMovies, isLoadingFetchFavorite, errorFetchFavorite, movieListId } = storeToRefs(favoriteStore)
+        const { token, accessToken, requestToken, accountId, isConnected } = storeToRefs(authStore)
 
         //declare createApprovedToken() from the store to link it to the button
         const createToken = () => {
-            favoriteStore.createToken()
+            authStore.createToken()
         }
         const getAccessToken = () => {
             favoriteStore.getAccessToken()
@@ -82,9 +144,9 @@ export default {
             favoriteStore.fetchFavorite()
         }
 
-        const createSession = () => {
-            favoriteStore.createSession()
-        }
+        onMounted(() => {
+            authStore.userConnected()
+        })
 
         return {
             favoriteMovies,
@@ -96,16 +158,58 @@ export default {
             accountId,
             getAccessToken,
             fetchFavorite,
-            createSession,
+            accessToken,
+            isConnected,
+            movieListId,
         }
     },
     data() {
-        return {}
+        return {
+            nameList: '',
+            description: '',
+            privateList: false,
+        }
     },
     async created() {},
-    methods: {},
+    methods: {
+        async createList() {
+            try {
+                const response = await axios.post(
+                    'https://api.themoviedb.org/4/list',
+                    {
+                        description: this.description,
+                        name: this.nameList,
+                        iso_3166_1: 'US',
+                        iso_639_1: 'en',
+                        public: this.privateList,
+                    },
+                    {
+                        headers: {
+                            accept: 'application/json',
+                            'content-type': 'application/json',
+                            Authorization: 'Bearer ' + this.accessToken,
+                        },
+                    },
+                )
+
+                this.movieListId = response.data.id
+                localStorage.setItem('movieListId', this.movieListId)
+                console.log(this.movieListId)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+    },
+    watch: {
+        movieListId(newValue) {
+            if (newValue) {
+                this.fetchFavorite()
+            }
+        },
+    },
     components: {
         MyButton,
+        MovieCard,
     },
 }
 </script>
