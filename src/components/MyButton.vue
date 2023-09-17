@@ -2,14 +2,14 @@
     <button
         type="button"
         role="link"
-        class="py-2 px-6 bg-red-700 rounded hover:bg-opacity-80 cursor-pointer"
+        class="py-2 px-6 bg-slate-300 rounded text-black tracking-widest font-semibold text-xl cursor-pointer opacity-90 hover:opacity-100"
         @click="handleClick"
     >
         {{ cta }}
     </button>
 </template>
 
-<script>
+<script lang="ts">
 export default {
     name: 'MyButton',
     data() {

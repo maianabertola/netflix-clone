@@ -74,27 +74,13 @@ export const useAuthStore = defineStore({
             }
         },
 
-        async createSession() {
-            const options = {
-                method: 'POST',
-                url: 'https://api.themoviedb.org/3/authentication/session/convert/4',
-                headers: {
-                    accept: 'application/json',
-                    'content-type': 'application/json',
-                    Authorization:
-                        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
-                },
-                data: this.accessToken,
-            }
-
-            axios
-                .request(options)
-                .then(function (response) {
-                    console.log(response.data)
-                })
-                .catch(function (error) {
-                    console.error(error)
-                })
+        async logOut() {
+            console.log('IN LOGOUT')
+            localStorage.removeItem('account Id')
+            localStorage.removeItem('access Token')
+            localStorage.removeItem('request token')
+            localStorage.removeItem('movieListId')
+            this.userConnected()
         },
     },
 })

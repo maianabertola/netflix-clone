@@ -4,7 +4,7 @@
         <HeroSlider
             v-if="topRatedMovies"
             :title="topRatedMovies[0].title"
-            :posterPath="topRatedMovies[0].poster_path"
+            :posterPath="topRatedMovies[0].backdrop_path"
             :description="topRatedMovies[0].overview"
             :id="topRatedMovies[0].id"
         ></HeroSlider>
@@ -13,11 +13,19 @@
     <!-- TOP 4 MOVIES -->
     <section class="relative">
         <div class="titleSection">
-            <h1>Best movies of the month</h1>
+            <h2>Best movies of the month</h2>
             <hr />
         </div>
 
-        <div class="grid grid-cols-4 grid-rows-1 gap-20 z-10 px-10 max-w-200px" v-if="bestMovies">
+        <div class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 numbers cursor-pointer relative">
+            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700 mr-3">
+                {{ number }}
+            </div>
+        </div>
+        <div
+            class="grid grid-cols-4 grid-rows-1 gap-15 z-10 px-10 max-w-400px absolute -translate-y-[30rem] gap-40 -translate-x-8"
+            v-if="bestMovies"
+        >
             <MovieCard
                 v-for="movie in bestMovies"
                 :key="movie.id"
@@ -29,17 +37,10 @@
                 :mediaType="moviesType"
             />
         </div>
-        <div
-            class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 absolute -translate-y-[32rem] gap-40 -translate-x-8 numbers"
-        >
-            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700 mr-3">
-                {{ number }}
-            </div>
-        </div>
     </section>
 
     <!-- MOVIES BY CATEGORIES -->
-    <section>
+    <!-- <section>
         <div class="titleSection">
             <h1>Discover our movies</h1>
             <hr />
@@ -66,7 +67,7 @@
                 :mediaType="moviesType"
             />
         </div>
-    </section>
+    </section> -->
 </template>
 
 <script lang="ts">

@@ -1,24 +1,32 @@
 <template>
-    <div class="grid grid-cols-4 grid-rows-1 h-[80vh] bg-black">
-        <div class="relative top-10 left-10 p-50 max-w-[85%] col-span-2">
-            <h1>Must see</h1>
-            <div class="bg-neutral-500/50 p-5 rounded">
-                <h2>{{ title }}</h2>
-                <p>{{ description }}</p>
-                <div class="flex flex-row gap-4">
-                    <MyButton cta="More info" @click="() => navToMovieDetails(id)"></MyButton>
-                    <MyButton cta="Add to your favorite"></MyButton>
-                </div>
-            </div>
+    <div class="h-[100vh]">
+        <!-- <div class="grid grid-cols-4 grid-rows-1 h-[90vh] bg-black"> -->
+        <div class="absolute top-0 left-0 -z-10 h-[95vh] w-screen opacity-60">
+            <!-- <div class="col-start-3 col-span-2 -z-10"> -->
+            <img :src="moviePoster" :alt="title" />
+            <!-- </div> -->
         </div>
-        <div class="col-start-3 col-span-2">
-            <img :src="moviePoster" class="block w-full h-full object-scale-down" :alt="title" />
+        <div class="flex flex-col relative top-20 left-10 p-50 max-w-[85%] col-span-2 w-5/12">
+            <h1 class="mb-[1rem]">Must see</h1>
+            <hr />
+            <h2>
+                {{ title }}
+            </h2>
+            <hr class="w-11/12" />
+            <div class="w-10/12">
+                <p>{{ description }}</p>
+            </div>
+            <div class="flex flex-row gap-4">
+                <MyButton cta="Tell me more" @click="() => navToMovieDetails(id)"></MyButton>
+                <FavoriteButton cta="Add to your favorite"></FavoriteButton>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import MyButton from './MyButton.vue'
+import FavoriteButton from './FavoriteButton.vue'
 
 export default {
     name: 'HeroSlider',
@@ -33,6 +41,7 @@ export default {
     },
     components: {
         MyButton,
+        FavoriteButton,
     },
     computed: {
         moviePoster() {

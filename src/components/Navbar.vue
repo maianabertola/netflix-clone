@@ -10,6 +10,7 @@
                     <RouterLink to="/all-movies"> <li>Movies</li></RouterLink>
                     <RouterLink to="/favorite-movies"> <li>Favorite</li></RouterLink>
                     <RouterLink to="/about"> <li>About</li></RouterLink>
+                    <RouterLink to="/account"><li>Account</li></RouterLink>
                 </ul>
             </div>
         </nav>

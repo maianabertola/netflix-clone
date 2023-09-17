@@ -110,8 +110,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <MyButton cta="Create session" @click="() => this.createSession()"></MyButton>> -->
     </section>
 </template>
 
@@ -170,7 +168,7 @@ export default {
             privateList: false,
         }
     },
-    async created() {},
+    created() {},
     methods: {
         async createList() {
             try {
