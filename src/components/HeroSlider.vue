@@ -1,10 +1,7 @@
 <template>
     <div class="h-[100vh]">
-        <!-- <div class="grid grid-cols-4 grid-rows-1 h-[90vh] bg-black"> -->
-        <div class="absolute top-0 left-0 -z-10 h-[95vh] w-screen opacity-60">
-            <!-- <div class="col-start-3 col-span-2 -z-10"> -->
+        <div class="absolute top-0 left-0 -z-10 w-screen opacity-60 overflow-hidden">
             <img :src="moviePoster" :alt="title" />
-            <!-- </div> -->
         </div>
         <div class="flex flex-col relative top-20 left-10 p-50 max-w-[85%] col-span-2 w-5/12">
             <h1 class="mb-[1rem]">Must see</h1>
