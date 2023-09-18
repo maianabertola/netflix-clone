@@ -73,7 +73,6 @@ export default {
         checkFavorite() {
             this.favoriteMovies.map((favoriteMovie) => {
                 if (favoriteMovie.id === this.movieId) {
-                    console.log('FAVORITE MOVIE ID', favoriteMovie.id)
                     this.isClicked = true
                 }
             })

@@ -6,18 +6,18 @@
         </div>
         <div v-if="!isConnected">
             <div
-                class="w-full h-[100vh] pt-[3vh]"
+                class="w-full h-screen pt-[3vh]"
                 :style="{
                     'background-image':
                         'linear-gradient(rgb(0 0 0 / 83%), rgb(18 17 17 / 50%)),url(https://files.natixis.sbcdnsb.com/images/iFgRxe8MTtGHJmoianoj3A/content/1643367631/1371098/600/mosaique.png)',
                 }"
             >
-                <div class="text-center m-width-500 m-auto p-10">
+                <div class="text-center w-7/12 m-auto p-10">
                     <h2>Looking to save your favorite movies?</h2>
                     <p>
                         If you want to keep a digital list of your favorite movies that's accessible from anywhere, you
-                        can create an account. <br />
-                        To do so, you need to register first and agree to share data with our partner, TMDB.
+                        can create an account. To do so, you need to register first and agree to share data with our
+                        partner, TMDB.
                     </p>
                     <!-- When clicking, it fires the function createSession -->
                     <MyButton cta="Create account" @click="() => this.createToken()"></MyButton>
@@ -152,7 +152,6 @@ export default {
     methods: {
         async createList() {
             const accessToken = localStorage.getItem('access Token')
-            console.log('access token in createList', accessToken)
             try {
                 const response = await axios.post(
                     'https://api.themoviedb.org/4/list',
@@ -180,19 +179,27 @@ export default {
             }
         },
     },
+    computed: {
+        // favoriteMoviesLength() {
+        //     return this.favoriteMovies.length
+        // },
+    },
     watch: {
         movieListId(newValue) {
             if (newValue) {
                 this.fetchFavorite()
             }
         },
-        // favoriteMovies(newValue) {
-        //     if (newValue) {
-        //         console.log('dans watch fav movies')
+
+        // favoriteMovies: {
+        //     deep: true,
+        //     handler(newValue, oldValue) {
+        //         console.log('I AM IN THE WATCHER', newValue)
         //         this.fetchFavorite()
-        //     }
+        //     },
         // },
     },
+
     components: {
         MyButton,
         MovieCard,

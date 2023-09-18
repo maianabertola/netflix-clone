@@ -11,16 +11,18 @@ export const useAuthStore = defineStore({
         accessToken: null,
         accountId: null,
         isConnected: false,
+        isLoggedOut: true,
     }),
     getters: {},
     actions: {
         async userConnected() {
             const accessToken = localStorage.getItem('access Token')
             const accountId = localStorage.getItem('account Id')
+
             if (accessToken !== null && accountId !== null) {
-                this.isConnected = true
                 this.accessToken = accessToken
                 this.accountId = accountId
+                this.isConnected = true
             }
         },
         async createToken() {
@@ -34,8 +36,7 @@ export const useAuthStore = defineStore({
                         headers: {
                             accept: 'application/json',
                             'content-type': 'application/json',
-                            Authorization:
-                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                            Authorization: 'Bearer ' + apiAccessToken,
                         },
                     },
                 )
@@ -61,12 +62,10 @@ export const useAuthStore = defineStore({
                         headers: {
                             accept: 'application/json',
                             'content-type': 'application/json',
-                            Authorization:
-                                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                            Authorization: 'Bearer ' + apiAccessToken,
                         },
                     },
                 )
-                console.log('RES GET ACCESS TOKEN', response.data)
                 this.accountId = response.data.account_id
                 localStorage.setItem('account Id', this.accountId)
                 this.accessToken = response.data.access_token
@@ -82,7 +81,7 @@ export const useAuthStore = defineStore({
             localStorage.removeItem('access Token')
             localStorage.removeItem('request token')
             localStorage.removeItem('movieListId')
-            this.userConnected()
+            this.isLoggedOut = true
         },
     },
 })

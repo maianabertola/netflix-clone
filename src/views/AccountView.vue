@@ -29,18 +29,24 @@
                 </div>
                 <MyButton cta="Confirm creation" @click="() => this.getAccessToken()"></MyButton>
             </div>
-            <div v-if="isConnected" class="mb-5">
-                <div><p class="italic text-5xl">You are logged in</p></div>
-                <div><p>These are your account information</p></div>
+            <div v-if="isConnected && !isLoggedOut" class="mb-5">
                 <div>
-                    <p>
-                        Account id: <span> {{ accountId }}</span>
-                    </p>
+                    <div><p class="italic text-5xl">You are logged in</p></div>
+                    <div><p>These are your account information</p></div>
+                    <div>
+                        <p>
+                            Account id: <span> {{ accountId }}</span>
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-5">
+                        <FavoriteButton cta="Create a favorite list" @click="() => navToFavorite()"></FavoriteButton>
+                        <MyButton cta="Log out" @click="() => this.logOut()"></MyButton>
+                    </div>
                 </div>
-                <div class="flex flex-col gap-5">
-                    <FavoriteButton cta="Create a favorite list" @click="() => navToFavorite()"></FavoriteButton>
-                    <MyButton cta="Log out" @click="() => this.logOut()"></MyButton>
-                </div>
+            </div>
+            <div v-if="isLoggedOut && isConnected">
+                <div><p class="italic text-5xl">You have been logged out</p></div>
+                <div><p>This page will automatically refresh.</p></div>
             </div>
         </div>
 
@@ -61,7 +67,7 @@ export default {
     name: 'Account',
     setup() {
         const authStore = useAuthStore()
-        const { token, accessToken, requestToken, accountId, isConnected } = storeToRefs(authStore)
+        const { token, accessToken, requestToken, accountId, isConnected, isLoggedOut } = storeToRefs(authStore)
 
         const createToken = () => {
             authStore.createToken()
@@ -92,6 +98,7 @@ export default {
             isConnected,
             logOut,
             userConnected,
+            isLoggedOut,
         }
     },
     data() {
@@ -105,10 +112,20 @@ export default {
     },
     watch: {
         accessToken(newValue) {
-            console.log('HERE IN WATCH')
-            if (newValue) {
-                this.userConnected()
-            }
+            console.log('user is connected or not', newValue)
+            this.userConnected()
+        },
+        isLoggedOut: {
+            handler(newValue) {
+                if (newValue == true) {
+                    setTimeout(() => {
+                        this.isLoggedOut = false
+                        this.isConnected = false
+                        this.userConnected()
+                    }, 5000) // after 5 seconds
+                }
+            },
+            immediate: true,
         },
     },
     components: {
