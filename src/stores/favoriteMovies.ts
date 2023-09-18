@@ -15,12 +15,13 @@ export const useFavoriteStore = defineStore({
     actions: {
         async fetchFavorite() {
             this.isLoadingFetchFavorite = true
+            const accessToken = localStorage.getItem('access Token')
+
             try {
                 const response = await axios.get(`https://api.themoviedb.org/4/list/${this.movieListId}`, {
                     headers: {
                         accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        Authorization: 'Bearer ' + accessToken,
                     },
                 })
                 this.favoriteMovies = response.data.results
@@ -31,27 +32,11 @@ export const useFavoriteStore = defineStore({
                 console.log('error', error)
             }
         },
-        async addFavorite(movieId: Number, mediaType: String) {
+        async addFavorite(movieId: Number) {
             const movieList = localStorage.getItem('movieListId')
             this.movieListId = movieList
 
-            // try {
-            //     const response = await axios.post(
-            //         `https://api.themoviedb.org/4/${this.movieListId}/items`,
-
-            //         { items: [{ media_type: mediaType, media_id: movieId }] },
-            //         {
-            //             headers: {
-            //                 accept: 'application/json',
-            //                 Authorization:
-            //                     'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
-            //             },
-            //         },
-            //     )
-            //     console.log('Success', response.data)
-            // } catch (error) {
-            //     console.log(error)
-            // }
+            const accessToken = localStorage.getItem('access Token')
 
             const options = {
                 method: 'POST',
@@ -59,11 +44,10 @@ export const useFavoriteStore = defineStore({
                 headers: {
                     accept: 'application/json',
                     'content-type': 'application/json',
-                    Authorization:
-                        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
+                    Authorization: 'Bearer ' + accessToken,
                 },
                 data: {
-                    items: [{ media_type: mediaType, media_id: movieId }],
+                    items: [{ media_type: 'movie', media_id: movieId }],
                 },
             }
 
@@ -76,27 +60,11 @@ export const useFavoriteStore = defineStore({
                     console.error(error)
                 })
         },
-        async deleteFavorite(movieId: Number, mediaType: String) {
+        async deleteFavorite(movieId: Number) {
             const movieList = localStorage.getItem('movieListId')
             this.movieListId = movieList
-
-            // try {
-            //     const response = await axios.post(
-            //         `https://api.themoviedb.org/4/${this.movieListId}/items`,
-
-            //         { items: [{ media_type: mediaType, media_id: movieId }] },
-            //         {
-            //             headers: {
-            //                 accept: 'application/json',
-            //                 Authorization:
-            //                     'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
-            //             },
-            //         },
-            //     )
-            //     console.log('Success', response.data)
-            // } catch (error) {
-            //     console.log(error)
-            // }
+            const accessToken = localStorage.getItem('access Token')
+            console.log('access', accessToken)
 
             const options = {
                 method: 'DELETE',
@@ -104,11 +72,10 @@ export const useFavoriteStore = defineStore({
                 headers: {
                     accept: 'application/json',
                     'content-type': 'application/json',
-                    Authorization:
-                        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NGZkODBiZDZhMjIyNzAwZmQxZWM1ZGIiLCJuYmYiOjE2OTQ5NDM0NjcsImF1ZCI6ImU0M2NmMWQ4ZGM1MjhjM2RhYmQ2YjY3YmE4YzE0N2YyIiwianRpIjoiNjcwNzQ4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCIsImFwaV93cml0ZSJdLCJ2ZXJzaW9uIjoxfQ.NscnYsAEb9X2GI-ttP5DTqvN6A5L0-FQ567WIAYy0O4',
+                    Authorization: 'Bearer ' + accessToken,
                 },
                 data: {
-                    items: [{ media_type: mediaType, media_id: movieId }],
+                    items: [{ media_type: 'movie', media_id: movieId }],
                 },
             }
 
@@ -120,6 +87,10 @@ export const useFavoriteStore = defineStore({
                 .catch(function (error) {
                     console.error(error)
                 })
+        },
+        async retrieveListID() {
+            const list = localStorage.getItem('movieListId')
+            this.movieListId = list
         },
     },
 })

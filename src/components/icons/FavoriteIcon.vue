@@ -19,23 +19,32 @@
 
 <script lang="ts">
 import { useFavoriteStore } from '@/stores/favoriteMovies'
+import { useAuthStore } from '@/stores/authStore'
+import { storeToRefs } from 'pinia'
 
 export default {
     name: 'FavoriteIcon',
     setup() {
         const favoriteStore = useFavoriteStore()
+        const authStore = useAuthStore()
 
-        const addFavorite = (movieId: Number, mediaType: String) => {
-            favoriteStore.addFavorite(movieId, mediaType)
+        const { accessToken } = storeToRefs(authStore)
+
+        const { favoriteMovies } = storeToRefs(favoriteStore)
+
+        const addFavorite = (movieId: Number) => {
+            favoriteStore.addFavorite(movieId)
         }
 
-        const deleteFavorite = (movieId: Number, mediaType: String) => {
-            favoriteStore.deleteFavorite(movieId, mediaType)
+        const deleteFavorite = (movieId: Number) => {
+            favoriteStore.deleteFavorite(movieId)
         }
 
         return {
             addFavorite,
             deleteFavorite,
+            accessToken,
+            favoriteMovies,
         }
     },
     data() {
@@ -43,30 +52,36 @@ export default {
             isClicked: false,
         }
     },
+    created() {
+        this.checkFavorite()
+    },
     methods: {
         handleClick() {
             this.$emit('click')
 
             if (this.isClicked === false) {
-                this.addFavorite(this.movieId, this.mediaType)
-                console.log('movieId', this.movieId, 'media type', this.mediaType)
-
+                this.addFavorite(this.movieId)
                 console.log("It's been addded!")
                 this.isClicked = true
             } else {
-                this.deleteFavorite(this.movieId, this.mediaType)
+                this.deleteFavorite(this.movieId)
                 console.log("It's been removed!")
                 this.isClicked = false
             }
+        },
+
+        checkFavorite() {
+            this.favoriteMovies.map((favoriteMovie) => {
+                if (favoriteMovie.id === this.movieId) {
+                    console.log('FAVORITE MOVIE ID', favoriteMovie.id)
+                    this.isClicked = true
+                }
+            })
         },
     },
     props: {
         movieId: {
             type: Number,
-            required: true,
-        },
-        mediaType: {
-            type: String,
             required: true,
         },
     },

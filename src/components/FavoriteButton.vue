@@ -37,29 +37,29 @@ export default {
     methods: {
         handleClick() {
             this.$emit('click')
+            if (this.movieId) {
+                if (this.isClicked === false) {
+                    this.addFavorite(this.movieId)
 
-            if (this.isClicked === false) {
-                this.addFavorite(this.movieId, this.mediaType)
-                console.log('movieId', this.movieId, 'media type', this.mediaType)
-
-                console.log("It's been addded!")
-                this.isClicked = true
-            } else {
-                this.deleteFavorite(this.movieId, this.mediaType)
-                console.log("It's been removed!")
-                this.isClicked = false
+                    console.log("It's been addded!")
+                    this.isClicked = true
+                } else {
+                    this.deleteFavorite(this.movieId)
+                    console.log("It's been removed!")
+                    this.isClicked = false
+                }
             }
         },
     },
     props: {
         movieId: {
             type: Number,
-            required: true,
+            required: false,
         },
-        mediaType: {
-            type: String,
-            required: true,
-        },
+        // mediaType: {
+        //     type: String,
+        //     required: false,
+        // },
         cta: {
             type: String,
             required: true,

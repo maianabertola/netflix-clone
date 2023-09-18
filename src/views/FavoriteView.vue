@@ -1,6 +1,10 @@
 <template>
     <section>
-        <div v-if="!isConnected && !requestToken">
+        <div class="titleSection">
+            <h1>Favorite Movies</h1>
+            <hr />
+        </div>
+        <div v-if="!isConnected">
             <div
                 class="w-full h-[100vh] pt-[3vh]"
                 :style="{
@@ -21,45 +25,30 @@
             </div>
         </div>
 
-        <div v-if="requestToken && !accountId">
-            <div class="titleSection">
-                <h1>Favorite Movies</h1>
-                <hr />
-            </div>
-            <div class="text-center m-width-500 m-auto p-10">
-                <h2>One last step,</h2>
+        <div v-if="isConnected && !movieListId" class="grid grid-cols-4 items-center">
+            <div>
                 <p>
-                    The first step to create your account is done!
-                    <br />
-                    You now have to validate your account creation.
+                    Dear user, <br />
+                    It seems you haven't created a favorite movies list yet! Please create one to save and access your
+                    favorite films without any hassle.
                 </p>
-                <MyButton cta="Confirm creation" @click="() => this.getAccessToken()"></MyButton>
             </div>
-        </div>
-
-        <div v-if="isConnected">
-            <div class="titleSection">
-                <h1>Favorite Movies</h1>
-                <hr />
-            </div>
-            <div class="flex flex-row justify-between">
-                <h3>Acound Id: {{ accountId }}</h3>
-            </div>
-            <div v-if="!movieListId">
-                <form @submit.prevent="createList">
-                    <div>
-                        <label>List name</label>
+            <div class="border"></div>
+            <form @submit.prevent="createList" class="col-span-2 grid">
+                <div class="grid-rows-6 cols-2">
+                    <h3 class="col-span-2">Fullfill this form to</h3>
+                    <p class="text-7xl font-semibold italic">Create your favorite list</p>
+                    <div class="inputWrapper">
+                        <label>Name</label>
                         <input
                             id="name"
                             type="text"
                             name="name"
                             v-model="nameList"
-                            placeholder="Name your list of favorite movies"
-                            class="text-black"
+                            placeholder="Eg: Michel favorite movies"
                         />
-                        {{ nameList }}
                     </div>
-                    <div>
+                    <div class="inputWrapper">
                         <label>Description</label>
                         <input
                             id="description"
@@ -67,46 +56,39 @@
                             name="description"
                             v-model="description"
                             placeholder="Few words about your list"
-                            class="text-black"
                         />
-                        {{ description }}
                     </div>
-                    <div>
-                        <label
-                            >Private List
-                            <input
-                                id="privateList"
-                                type="checkbox"
-                                name="privateList"
-                                v-model="privateList"
-                                placeholder="Few words about your list"
-                            />
-                        </label>
-                        {{ privateList }}
+                    <div class="inputWrapper">
+                        <label>Private List </label>
+                        <input
+                            id="privateList"
+                            type="checkbox"
+                            name="privateList"
+                            v-model="privateList"
+                            placeholder="Few words about your list"
+                            class="w-2/6"
+                        />
                     </div>
-                    <button type="submit" class="btn btn-primary">Click me</button>
-                </form>
-            </div>
-            <div v-if="movieListId">
-                <MyButton cta="click to fetch" @click="() => this.fetchFavorite()"></MyButton>
-
-                <div v-if="!favoriteMovies.length">
-                    <p>
-                        Your list is empty. <RouterLink to="/all-movies">Discover our movies to add them.</RouterLink>
-                    </p>
+                    <MyButton cta="Create list" type="submit"></MyButton>
                 </div>
-                <div v-if="favoriteMovies.length > 1">
-                    <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="favoriteMovies">
-                        <MovieCard
-                            v-for="movie in favoriteMovies"
-                            :key="movie.id"
-                            :title="movie.original_title"
-                            :moviePosterPath="movie.poster_path"
-                            :rating="movie.vote_average"
-                            :movieId="movie.id"
-                            :mediaType="moviesType"
-                        />
-                    </div>
+            </form>
+        </div>
+
+        <div v-if="isConnected && movieListId">
+            <div v-if="!favoriteMovies.length">
+                <p>Your list is empty. <RouterLink to="/all-movies">Discover our movies to add them.</RouterLink></p>
+            </div>
+
+            <div v-if="favoriteMovies.length >= 1">
+                <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="favoriteMovies">
+                    <MovieCard
+                        v-for="movie in favoriteMovies"
+                        :key="movie.id"
+                        :title="movie.original_title"
+                        :moviePosterPath="movie.poster_path"
+                        :rating="movie.vote_average"
+                        :movieId="movie.id"
+                    />
                 </div>
             </div>
         </div>
@@ -128,15 +110,7 @@ export default {
         const favoriteStore = useFavoriteStore()
         const authStore = useAuthStore()
         const { favoriteMovies, isLoadingFetchFavorite, errorFetchFavorite, movieListId } = storeToRefs(favoriteStore)
-        const { token, accessToken, requestToken, accountId, isConnected } = storeToRefs(authStore)
-
-        //declare createApprovedToken() from the store to link it to the button
-        const createToken = () => {
-            authStore.createToken()
-        }
-        const getAccessToken = () => {
-            favoriteStore.getAccessToken()
-        }
+        const { accessToken, accountId, isConnected } = storeToRefs(authStore)
 
         const fetchFavorite = () => {
             favoriteStore.fetchFavorite()
@@ -144,21 +118,27 @@ export default {
 
         onMounted(() => {
             authStore.userConnected()
+            favoriteStore.retrieveListID()
+
+            console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
+
+            if (movieListId !== null) {
+                console.log('FETCHING IN MOUNTED')
+                favoriteStore.fetchFavorite()
+                console.log('fav movies in mounted', favoriteMovies)
+            }
+            console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
         })
 
         return {
             favoriteMovies,
             isLoadingFetchFavorite,
             errorFetchFavorite,
-            token,
-            createToken,
-            requestToken,
-            accountId,
-            getAccessToken,
             fetchFavorite,
-            accessToken,
-            isConnected,
             movieListId,
+            accountId,
+            isConnected,
+            accessToken,
         }
     },
     data() {
@@ -171,6 +151,8 @@ export default {
     created() {},
     methods: {
         async createList() {
+            const accessToken = localStorage.getItem('access Token')
+            console.log('access token in createList', accessToken)
             try {
                 const response = await axios.post(
                     'https://api.themoviedb.org/4/list',
@@ -185,7 +167,7 @@ export default {
                         headers: {
                             accept: 'application/json',
                             'content-type': 'application/json',
-                            Authorization: 'Bearer ' + this.accessToken,
+                            Authorization: 'Bearer ' + accessToken,
                         },
                     },
                 )
@@ -204,6 +186,12 @@ export default {
                 this.fetchFavorite()
             }
         },
+        // favoriteMovies(newValue) {
+        //     if (newValue) {
+        //         console.log('dans watch fav movies')
+        //         this.fetchFavorite()
+        //     }
+        // },
     },
     components: {
         MyButton,

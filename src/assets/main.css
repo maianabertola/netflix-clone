@@ -28,11 +28,13 @@ a {
     transition: 0.4s;
     color: hsl(60 20% 95%);
     font-weight: 700;
+    padding: 1rem 0;
 }
 
 @media (hover: hover) {
     a:hover {
         background-color: hsla(357, 74%, 42%, 0.2);
+        padding: 1rem;
     }
 }
 
@@ -91,9 +93,9 @@ p {
     margin-bottom: 20px;
 }
 
-li {
+/* li {
     padding: 10px;
-}
+} */
 
 .titleSection {
     padding: 3vh 0;
@@ -146,4 +148,19 @@ img {
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+label {
+    font-size: 1.25rem;
+}
+
+input {
+    color: black;
+    width: 100%;
+    text-align: center;
+}
+
+.inputWrapper {
+    gap: 1rem;
+    margin: 1rem 0;
 }

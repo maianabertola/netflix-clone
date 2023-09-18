@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="titleSection">
-            <h1>Discover our movies</h1>
+            <h2>Discover our movies</h2>
             <hr />
         </div>
         <div class="grid grid-cols-6 row-auto gap-5 pb-6" v-if="categories">
@@ -15,7 +15,7 @@
         </div>
         <div v-if="isLoading">Content is loading</div>
         <div v-if="emptyMovie">Oups, it seems this category is empty</div>
-        <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="movies">
+        <div class="grid grid-cols-4 grid-rows-3 gap-20" v-if="movies">
             <MovieCard
                 v-for="movie in moviesToDisplay"
                 :key="movie.id"
@@ -23,7 +23,6 @@
                 :moviePosterPath="movie.poster_path"
                 :rating="movie.vote_average"
                 :movieId="movie.id"
-                :mediaType="moviesType"
             />
         </div>
     </section>

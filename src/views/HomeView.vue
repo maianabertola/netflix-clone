@@ -33,7 +33,6 @@
                 class="pl-20"
                 :rating="movie.vote_average"
                 :movieId="movie.id"
-                :mediaType="moviesType"
             />
         </div>
     </section>
@@ -63,7 +62,6 @@
                 :moviePosterPath="movie.poster_path"
                 :rating="movie.vote_average"
                 :movieId="movie.id"
-                :mediaType="moviesType"
             />
         </div>
     </section>

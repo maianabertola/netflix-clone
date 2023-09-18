@@ -10,7 +10,7 @@
         <div class="flex flex-row justify-between content-center py-3 px-1">
             <!-- <h3>{{ title }}</h3> -->
             <Rating :rating="rating"></Rating>
-            <FavoriteIcon :movieId="movieId" :mediaType="mediaType"></FavoriteIcon>
+            <FavoriteIcon :movieId="movieId"></FavoriteIcon>
         </div>
     </div>
 </template>
@@ -42,10 +42,10 @@ export default {
             type: Number,
             required: true,
         },
-        mediaType: {
-            type: String,
-            required: true,
-        },
+        // mediaType: {
+        //     type: String,
+        //     required: false,
+        // },
         rating: {
             type: Number,
             required: true,

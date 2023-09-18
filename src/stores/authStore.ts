@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+const apiAccessToken = import.meta.env.VITE_APIACCESSTOKEN
+
 export const useAuthStore = defineStore({
     id: 'authStore',
     state: () => ({
