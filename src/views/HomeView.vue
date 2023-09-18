@@ -11,19 +11,18 @@
     </section>
 
     <!-- TOP 4 MOVIES -->
-    <section class="relative">
+    <section>
         <div class="titleSection">
             <h2>Best movies of the month</h2>
             <hr />
         </div>
-
         <div class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 numbers cursor-pointer relative">
             <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700 mr-3">
                 {{ number }}
             </div>
         </div>
         <div
-            class="grid grid-cols-4 grid-rows-1 gap-15 z-10 px-10 max-w-400px absolute -translate-y-[30rem] gap-40 -translate-x-8"
+            class="grid grid-cols-4 grid-rows-1 gap-[47px] z-10 px-10 absolute -translate-y-[33rem] -translate-x-5"
             v-if="bestMovies"
         >
             <MovieCard
@@ -31,7 +30,7 @@
                 :key="movie.id"
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
-                class="pl-12"
+                class="pl-20"
                 :rating="movie.vote_average"
                 :movieId="movie.id"
                 :mediaType="moviesType"
@@ -40,9 +39,9 @@
     </section>
 
     <!-- MOVIES BY CATEGORIES -->
-    <!-- <section>
+    <section>
         <div class="titleSection">
-            <h1>Discover our movies</h1>
+            <h2>Discover our movies</h2>
             <hr />
         </div>
         <div class="grid grid-cols-6 row-auto gap-5 pb-6" v-if="categories">
@@ -56,7 +55,7 @@
         </div>
         <div v-if="isLoading">Content is loading</div>
         <div v-if="emptyMovie">Oups, it seems this category is empty</div>
-        <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="movies">
+        <div class="grid grid-cols-4 grid-rows-3 gap-20" v-if="movies">
             <MovieCard
                 v-for="movie in moviesToDisplay"
                 :key="movie.id"
@@ -67,7 +66,7 @@
                 :mediaType="moviesType"
             />
         </div>
-    </section> -->
+    </section>
 </template>
 
 <script lang="ts">

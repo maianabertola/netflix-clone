@@ -1,14 +1,10 @@
 <template>
-    <div>
-        <RouterLink to="/">
+    <div class="scale-100 hover:drop-shadow-2xl">
+        <RouterLink :to="`/movie-details/${movieId}`">
             <div
-                class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7"
+                class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7 hover:border-2 border-red-700"
             >
-                <img
-                    :alt="title"
-                    :src="moviePoster"
-                    class="h-full w-full object-cover object-center group-hover:opacity-75"
-                />
+                <img :alt="title" :src="moviePoster" />
             </div>
         </RouterLink>
         <div class="flex flex-row justify-between content-center py-3 px-1">
