@@ -50,8 +50,8 @@
             </div>
         </div>
 
-        <div class="overflow-hidden">
-            <img src="../assets/pictures/pexels-ellie-burgin-4057890.jpg" />
+        <div class="overflow-hidden h-[60vh] w-full">
+            <img src="../assets/account.jpg" />
         </div>
     </section>
 </template>

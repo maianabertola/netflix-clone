@@ -1,5 +1,19 @@
 <template>
     <!-- HERO SECTION -->
+    <div class="vl-parent">
+        <Loading
+            :active="isLoadingCategories || isLoading"
+            isFullPage="true"
+            color="red"
+            loader="bars"
+            backgroundColor="black"
+            width="800"
+            zIndex="999"
+            opacity="100"
+        >
+        </Loading>
+    </div>
+
     <section v-if="topRatedMovies" class="p-0">
         <HeroSlider
             v-if="topRatedMovies"
@@ -76,6 +90,8 @@ import CategoryTab from '../components/CategoryTab.vue'
 import { useMoviesStore } from '../stores/discoverMovies.ts'
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
 
 export default {
     name: 'HomeView',
@@ -203,6 +219,7 @@ export default {
         MovieCard,
         HeroSlider,
         CategoryTab,
+        Loading,
     },
 }
 </script>
