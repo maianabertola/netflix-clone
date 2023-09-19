@@ -22,22 +22,22 @@
         </div>
     </div>
 
-    <div class="h-[80vh] lg:hidden">
+    <div class="h-[90vh] lg:hidden">
         <!-- Mobile hero image -->
         <div class="absolute top-0 left-0 -z-10 w-screen opacity-40 overflow-hidden lg:hidden">
             <img :src="moviePosterMobile" :alt="title" />
         </div>
 
         <!-- Responsive text container -->
-        <div class="flex flex-col items-center relative top-20 left-10 p-50 max-w-[85%] col-span-2 w-8/12 lg:hidden">
+        <div class="flex flex-col items-center content-center justify-center relative w-12/12 h-full lg:hidden">
             <h1 class="mb-[1rem]">Must see</h1>
-            <hr />
+            <hr class="w-10/12" />
             <h2>
                 {{ title }}
             </h2>
-            <hr class="w-11/12" />
-            <div class="w-11/12">
-                <p>{{ shortOverview }}</p>
+            <hr class="w-9/12" />
+            <div class="w-9/12">
+                <p class="text-center">{{ shortOverview }}</p>
             </div>
             <div class="flex flex-col gap-4">
                 <MyButton cta="Tell me more" @click="() => navToMovieDetails(id)"></MyButton>
