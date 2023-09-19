@@ -1,5 +1,5 @@
 <template>
-    <!-- HERO SECTION -->
+    <!-- LOADING -->
     <div class="vl-parent">
         <Loading
             :active="isLoadingCategories || isLoading"
@@ -14,11 +14,13 @@
         </Loading>
     </div>
 
+    <!-- HERO SECTION -->
     <section v-if="topRatedMovies" class="p-0">
         <HeroSlider
             v-if="topRatedMovies"
             :title="topRatedMovies[0].title"
             :posterPath="topRatedMovies[0].backdrop_path"
+            :mobilePosterPath="topRatedMovies[0].poster_path"
             :description="topRatedMovies[0].overview"
             :id="topRatedMovies[0].id"
         ></HeroSlider>

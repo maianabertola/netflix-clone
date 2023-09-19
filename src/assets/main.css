@@ -38,20 +38,6 @@ a {
     }
 }
 
-/* @media (min-width: 1024px) {
-    body {
-        display: flex;
-        flex-direction: column;
-        place-items: center;
-    }
-
-    #app {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        padding: 0 2rem;
-    }
-} */
-
 body,
 main {
     background-color: hsl(0 3% 13%);
@@ -68,6 +54,13 @@ h1 {
     text-transform: uppercase;
 }
 
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3.5rem;
+        line-height: 3rem;
+    }
+}
+
 h2 {
     font-size: 3.5rem;
     font-family: 'GT Condensed';
@@ -75,6 +68,13 @@ h2 {
     color: hsl(60 20% 95%);
     margin-bottom: 5px;
     text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.5rem;
+        line-height: 3rem;
+    }
 }
 
 h3 {
@@ -93,9 +93,11 @@ p {
     margin-bottom: 20px;
 }
 
-/* li {
-    padding: 10px;
-} */
+@media (max-width: 768px) {
+    p {
+        font-size: 1rem;
+    }
+}
 
 .titleSection {
     padding: 3vh 0;
