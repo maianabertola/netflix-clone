@@ -71,8 +71,8 @@
         </div>
     </section>
 
-    <!-- MOVIES BY CATEGORIES -->
-    <section class="hidden">
+    <!-- MOVIES BY CATEGORIES DESKTOP-->
+    <section class="hidden lg:block">
         <div class="titleSection">
             <h2>Discover our movies</h2>
             <hr />
@@ -99,12 +99,14 @@
             />
         </div>
     </section>
+
+    <!-- MOVIES BY CATEGORIES RESPONSIVE -->
     <section class="lg:hidden">
         <div class="titleSection">
             <h2>Discover our movies</h2>
             <hr />
         </div>
-        <div class="grid grid-cols-3 row-auto gap-5 pb-6" v-if="categories">
+        <div class="grid grid-cols-3 row-auto gap-3 pb-6 text-sm" v-if="categories">
             <CategoryTab
                 v-for="category in categoriesToDisplay"
                 :category="category.name"

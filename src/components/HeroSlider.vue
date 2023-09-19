@@ -22,14 +22,16 @@
         </div>
     </div>
 
-    <div class="h-[90vh] lg:hidden">
+    <div class="h-[70vh] lg:hidden">
         <!-- Mobile hero image -->
         <div class="absolute top-0 left-0 -z-10 w-screen opacity-40 overflow-hidden lg:hidden">
             <img :src="moviePosterMobile" :alt="title" />
         </div>
 
         <!-- Responsive text container -->
-        <div class="flex flex-col items-center content-center justify-center relative w-12/12 h-full lg:hidden">
+        <div
+            class="relative flex flex-col items-center content-center justify-center relative w-12/12 h-full lg:hidden"
+        >
             <h1 class="mb-[1rem]">Must see</h1>
             <hr class="w-10/12" />
             <h2>
@@ -85,7 +87,7 @@ export default {
         },
         shortOverview() {
             if (this.description) {
-                return this.description.slice(0, 180) + '...'
+                return this.description.slice(0, 100) + '...'
             }
             return ''
         },

@@ -4,7 +4,8 @@
             <h1>Favorite Movies</h1>
             <hr />
         </div>
-        <div v-if="!isConnected">
+        <!-- Desktop version -->
+        <div v-if="!isConnected" class="hidden lg:block">
             <div
                 class="w-full h-screen pt-[3vh]"
                 :style="{
@@ -24,19 +25,36 @@
             </div>
         </div>
 
-        <div v-if="isConnected && !movieListId" class="grid grid-cols-4 items-center">
-            <div>
-                <p>
+        <!-- Mobile version -->
+        <div v-if="!isConnected" class="lg:hidden">
+            <div
+                class="w-full h-screen pt-[3vh]"
+                :style="{
+                    'background-image':
+                        'linear-gradient(rgb(0 0 0 / 83%), rgb(18 17 17 / 50%)),url(https://files.natixis.sbcdnsb.com/images/iFgRxe8MTtGHJmoianoj3A/content/1643367631/1371098/600/mosaique.png)',
+                }"
+            >
+                <div class="text-center w-12/12 m-auto p-10">
+                    <h2>Join the movement</h2>
+                    <p>
+                        If you want to keep a digital list of your favorite movies that's accessible from anywhere, you
+                        can create an account. To do so, you need to register first and agree to share data with our
+                        partner, TMDB.
+                    </p>
+                    <MyButton cta="Create an account" @click="() => navToAccount()"></MyButton>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="isConnected && !movieListId" class="grid grid-cols-1">
+            <div class="flex flex-col justify-center">
+                <p class="text-center">
                     Dear user, <br />
-                    It seems you haven't created a favorite movies list yet! Please create one to save and access your
-                    favorite films without any hassle.
+                    Please create a list to save and access your favorite films without any hassle.
                 </p>
             </div>
-            <div class="border"></div>
             <form @submit.prevent="createList" class="col-span-2 grid">
                 <div class="grid-rows-6 cols-2">
-                    <h3 class="col-span-2">Fullfill this form to</h3>
-                    <p class="text-7xl font-semibold italic">Create your favorite list</p>
                     <div class="inputWrapper">
                         <label>Name</label>
                         <input
@@ -68,18 +86,22 @@
                             class="w-2/6"
                         />
                     </div>
-                    <MyButton cta="Create list" type="submit"></MyButton>
+                    <div class="flex flex-col justify-center">
+                        <MyButton cta="Create list" type="submit"></MyButton>
+                    </div>
                 </div>
             </form>
         </div>
 
         <div v-if="isConnected && movieListId">
             <div v-if="!favoriteMovies.length">
-                <p>Your list is empty. <RouterLink to="/all-movies">Discover our movies to add them.</RouterLink></p>
+                <p class="text-center">
+                    Your list is empty. <RouterLink to="/all-movies"><br />Discover our movies to add them.</RouterLink>
+                </p>
             </div>
 
             <div v-if="favoriteMovies.length >= 1">
-                <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="favoriteMovies">
+                <div class="grid grid-cols-2 grid-rows-3 gap-3" v-if="favoriteMovies">
                     <MovieCard
                         v-for="movie in favoriteMovies"
                         :key="movie.id"
@@ -178,7 +200,6 @@ export default {
             }
         },
         navToAccount() {
-            console.log('in nav')
             this.$emit('click')
             this.$router.push(`/account`)
         },

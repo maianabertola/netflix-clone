@@ -19,8 +19,8 @@
         </nav>
         <!-- Mobile desktop -->
 
-        <nav class="fixed top-0 left-0 right-0 py-5 px-[4vw] z-50 lg:hidden">
-            <ul class="flex flex-row gap-10 content-center items-center justify-center w-full">
+        <nav class="fixed top-0 left-0 right-0 py-3 px-[4vw] z-50 lg:hidden">
+            <ul class="flex flex-row gap-5 content-center items-center justify-center w-full">
                 <RouterLink to="/"><li>Homepage</li></RouterLink>
                 <RouterLink to="/all-movies"> <li>Movies</li></RouterLink>
                 <RouterLink to="/favorite-movies"> <li>Favorite</li></RouterLink>
