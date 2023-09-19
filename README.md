@@ -14,5 +14,5 @@ Since it was my first time using Vue3 and Tailwind, I made some documentation : 
 ## Example
 **Live example:** currently on deployment
 **Screenshots**
-![Screenshot of my project](<https://ibb.co/8NdHXJN>)
+![Screenshot of my project](https://ibb.co/8NdHXJN)
 
