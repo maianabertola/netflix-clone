@@ -18,7 +18,7 @@
             </div>
             <div class="flex flex-row gap-4">
                 <MyButton cta="Tell me more" @click="() => navToMovieDetails(id)"></MyButton>
-                <FavoriteButton cta="Add to your favorite"></FavoriteButton>
+                <FavoriteButton cta="Add to your favorite" @click="() => addFavorite(id)"></FavoriteButton>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
             </div>
             <div class="flex flex-col gap-4">
                 <MyButton cta="Tell me more" @click="() => navToMovieDetails(id)"></MyButton>
-                <FavoriteButton cta="Add to your favorite"></FavoriteButton>
+                <FavoriteButton cta="Add to your favorite" @click="() => addFavorite(id)"></FavoriteButton>
             </div>
         </div>
         <!-- Mobile hero image -->
@@ -53,9 +53,20 @@
 <script lang="ts">
 import MyButton from './MyButton.vue'
 import FavoriteButton from './FavoriteButton.vue'
+import { useFavoriteStore } from '@/stores/favoriteMovies'
 
 export default {
     name: 'HeroSlider',
+    setup() {
+        const favoriteStore = useFavoriteStore()
+        const addFavorite = (movieId: Number) => {
+            favoriteStore.addFavorite(movieId)
+        }
+
+        return {
+            addFavorite,
+        }
+    },
     data() {
         return {}
     },
@@ -64,6 +75,7 @@ export default {
             this.$emit('click')
             this.$router.push(`/movie-details/${id}`)
         },
+        addToFavorite(id: Number) {},
     },
     components: {
         MyButton,
