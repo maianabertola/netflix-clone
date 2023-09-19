@@ -142,6 +142,8 @@ import { storeToRefs } from 'pinia'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/css/index.css'
 
+const apiAccessToken = import.meta.env.VITE_APIACCESSTOKEN
+
 export default {
     name: 'HomeView',
     setup() {
@@ -184,7 +186,6 @@ export default {
     },
     computed: {
         moviesCopy() {
-            console.log('MOVIES', this.movies)
             return (this.moviesToDisplay = this.movies)
         },
 
@@ -217,8 +218,7 @@ export default {
                 const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
                     headers: {
                         accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        Authorization: 'Bearer ' + apiAccessToken,
                     },
                 })
                 this.bestMovies = response.data.results.splice(0, 4)
@@ -231,15 +231,13 @@ export default {
                 const response = await axios.get('https://api.themoviedb.org/3/movie/top_rated', {
                     headers: {
                         accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        Authorization: 'Bearer ' + apiAccessToken,
                     },
                     params: {
                         page: 1,
                     },
                 })
                 this.topRatedMovies = response.data.results
-                console.log(this.topRatedMovies)
             } catch (error) {
                 this.errorTopRatedMovies = error
                 console.log(this.errorTopRatedMovies)

@@ -61,11 +61,9 @@ export default {
 
             if (this.isClicked === false) {
                 this.addFavorite(this.movieId)
-                console.log("It's been addded!")
                 this.isClicked = true
             } else {
                 this.deleteFavorite(this.movieId)
-                console.log("It's been removed!")
                 this.isClicked = false
             }
         },
