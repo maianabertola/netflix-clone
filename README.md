@@ -12,7 +12,9 @@ Since it was my first time using Vue3 and Tailwind, I made some documentation : 
 - API : TMDB
 
 ## Example
-**Live example:** currently on deployment
-**Screenshots**
-![Screenshot of my project](homepageScreen.png)
+- **Live example:** currently on deployment
+- **Screenshots**
+![Homepage](homepageScreen.png)
+![Best movies](homepageScreen2.png)
+![Responsive](responsiveVersion.png)
 
