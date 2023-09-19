@@ -56,7 +56,7 @@
     <!-- TOP 4 MOVIES RESPONSIVE -->
     <section class="lg:hidden">
         <div class="titleSection">
-            <h2>Best movies of the month</h2>
+            <h2>Best movies <br />of the month</h2>
             <hr />
         </div>
         <div class="grid grid-cols-2 grid-rows-1 gap-[10px] z-10 px-10" v-if="bestMovies">

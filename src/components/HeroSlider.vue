@@ -1,4 +1,5 @@
 <template>
+    <!-- Desktop version -->
     <div class="h-[100vh] lg:block hidden">
         <!-- Desktop hero image -->
         <div class="absolute top-0 left-0 -z-10 w-screen opacity-60 overflow-hidden hidden lg:block">
@@ -22,15 +23,11 @@
         </div>
     </div>
 
-    <div class="h-[70vh] lg:hidden">
-        <!-- Mobile hero image -->
-        <div class="absolute top-0 left-0 -z-10 w-screen opacity-40 overflow-hidden lg:hidden">
-            <img :src="moviePosterMobile" :alt="title" />
-        </div>
-
+    <!-- Mobile version -->
+    <div class="lg:hidden h-[70vh] relative">
         <!-- Responsive text container -->
         <div
-            class="relative flex flex-col items-center content-center justify-center relative w-12/12 h-full lg:hidden"
+            class="top-0 left-0 w-full h-full flex flex-col items-center content-center justify-center relative w-12/12 h-full z-20"
         >
             <h1 class="mb-[1rem]">Must see</h1>
             <hr class="w-10/12" />
@@ -45,6 +42,10 @@
                 <MyButton cta="Tell me more" @click="() => navToMovieDetails(id)"></MyButton>
                 <FavoriteButton cta="Add to your favorite"></FavoriteButton>
             </div>
+        </div>
+        <!-- Mobile hero image -->
+        <div class="absolute top-0 z-10 w-screen opacity-40 overflow-hidden">
+            <img :src="moviePosterMobile" :alt="title" />
         </div>
     </div>
 </template>
