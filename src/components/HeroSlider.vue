@@ -22,9 +22,9 @@
         </div>
     </div>
 
-    <div class="vh-full lg:hidden">
+    <div class="h-[80vh] lg:hidden">
         <!-- Mobile hero image -->
-        <div class="absolute top-0 left-0 -z-10 w-screen opacity-60 overflow-hidden lg:hidden">
+        <div class="absolute top-0 left-0 -z-10 w-screen opacity-40 overflow-hidden lg:hidden">
             <img :src="moviePosterMobile" :alt="title" />
         </div>
 

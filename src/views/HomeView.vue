@@ -1,5 +1,5 @@
 <template>
-    <!-- LOADING -->
+    <!-- LOADING BARS -->
     <div class="vl-parent">
         <Loading
             :active="isLoadingCategories || isLoading"
@@ -26,8 +26,8 @@
         ></HeroSlider>
     </section>
 
-    <!-- TOP 4 MOVIES -->
-    <section>
+    <!-- TOP 4 MOVIES DESKTOP -->
+    <section class="hidden lg:block">
         <div class="titleSection">
             <h2>Best movies of the month</h2>
             <hr />
@@ -47,6 +47,24 @@
                 :title="movie.original_title"
                 :moviePosterPath="movie.poster_path"
                 class="pl-20"
+                :rating="movie.vote_average"
+                :movieId="movie.id"
+            />
+        </div>
+    </section>
+
+    <!-- TOP 4 MOVIES RESPONSIVE -->
+    <section class="lg:hidden">
+        <div class="titleSection">
+            <h2>Best movies of the month</h2>
+            <hr />
+        </div>
+        <div class="grid grid-cols-2 grid-rows-1 gap-[10px] z-10 px-10" v-if="bestMovies">
+            <MovieCard
+                v-for="movie in bestMovies"
+                :key="movie.id"
+                :title="movie.original_title"
+                :moviePosterPath="movie.poster_path"
                 :rating="movie.vote_average"
                 :movieId="movie.id"
             />
