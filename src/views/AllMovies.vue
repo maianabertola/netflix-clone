@@ -1,6 +1,20 @@
 <template>
-    <!-- MOVIES BY CATEGORIES DESKTOP-->
+    <!-- LOADING BARS -->
+    <div class="vl-parent">
+        <Loading
+            :active="isLoadingCategories || isLoading"
+            :isFullPage="true"
+            color="red"
+            loader="bars"
+            backgroundColor="black"
+            :width="800"
+            :zIndex="999"
+            :opacity="100"
+        >
+        </Loading>
+    </div>
 
+    <!-- MOVIES BY CATEGORIES DESKTOP-->
     <section class="hidden lg:block">
         <div class="titleSection">
             <h1>Discover our movies</h1>
@@ -28,8 +42,8 @@
             />
         </div>
     </section>
-    <!-- MOVIES BY CATEGORIES RESPONSIVE -->
 
+    <!-- MOVIES BY CATEGORIES RESPONSIVE -->
     <section class="lg:hidden">
         <div class="titleSection">
             <h1>Discover our movies</h1>
@@ -67,6 +81,8 @@ import CategoryTab from '../components/CategoryTab.vue'
 import { useMoviesStore } from '../stores/discoverMovies'
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/css/index.css'
 
 export default {
     name: 'HomeView',
@@ -157,6 +173,7 @@ export default {
         MovieCard,
         HeroSlider,
         CategoryTab,
+        Loading,
     },
 }
 </script>

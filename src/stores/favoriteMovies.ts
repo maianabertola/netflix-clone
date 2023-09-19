@@ -25,7 +25,6 @@ export const useFavoriteStore = defineStore({
                     },
                 })
                 this.favoriteMovies = response.data.results
-                console.log('fav', this.favoriteMovies)
                 this.isLoadingFetchFavorite = false
             } catch (error) {
                 this.errorFetchFavorite = error
@@ -53,8 +52,9 @@ export const useFavoriteStore = defineStore({
 
             axios
                 .request(options)
-                .then(function (response) {
+                .then((response) => {
                     console.log(response.data)
+                    this.fetchFavorite()
                 })
                 .catch(function (error) {
                     console.error(error)
@@ -64,7 +64,6 @@ export const useFavoriteStore = defineStore({
             const movieList = localStorage.getItem('movieListId')
             this.movieListId = movieList
             const accessToken = localStorage.getItem('access Token')
-            console.log('access', accessToken)
 
             const options = {
                 method: 'DELETE',
@@ -81,8 +80,9 @@ export const useFavoriteStore = defineStore({
 
             axios
                 .request(options)
-                .then(function (response) {
+                .then((response) => {
                     console.log(response.data)
+                    this.fetchFavorite()
                 })
                 .catch(function (error) {
                     console.error(error)

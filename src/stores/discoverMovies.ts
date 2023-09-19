@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
+const apiAccessToken = import.meta.env.VITE_APIACCESSTOKEN
+
 export const useMoviesStore = defineStore({
     id: 'movies',
     state: () => ({
@@ -33,8 +35,7 @@ export const useMoviesStore = defineStore({
                 const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
                     headers: {
                         accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        Authorization: 'Bearer ' + apiAccessToken,
                     },
                 })
                 this.movies = response.data.results
@@ -52,8 +53,7 @@ export const useMoviesStore = defineStore({
                 const response = await axios.get('https://api.themoviedb.org/3/genre/movie/list', {
                     headers: {
                         accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        Authorization: 'Bearer ' + apiAccessToken,
                     },
                 })
 

@@ -4,7 +4,8 @@
             <h1>Favorite Movies</h1>
             <hr />
         </div>
-        <!-- Desktop version -->
+        <!-- DESKTOP version -->
+        <!-- User is not connected -->
         <div v-if="!isConnected" class="hidden lg:block">
             <div
                 class="w-full h-screen pt-[3vh]"
@@ -20,12 +21,87 @@
                         can create an account. To do so, you need to register first and agree to share data with our
                         partner, TMDB.
                     </p>
-                    <MyButton cta="Create an account" @click="() => navToAccount"></MyButton>
+                    <MyButton cta="Create an account" @click="() => navToAccount()"></MyButton>
+                </div>
+            </div>
+        </div>
+        <!-- User is connected but did not create a list -->
+        <div v-if="isConnected && !movieListId" class="hidden lg:block">
+            <div class="grid grid-cols-4">
+                <div class="row-start-1 col-start-1">
+                    <p>
+                        Dear user, <br />
+                        It seems you haven't created a favorite movies list yet! Please create one to save and access
+                        your favorite films without any hassle.
+                    </p>
+                </div>
+                <div class="border row-start-1 col-start-2 h-full"></div>
+                <form @submit.prevent="createList" class="col-start-3 col-span-2">
+                    <div class="grid-rows-4 cols-2">
+                        <div class="inputWrapper">
+                            <label>Name</label>
+                            <input
+                                id="name"
+                                type="text"
+                                name="name"
+                                v-model="nameList"
+                                placeholder="Eg: Michel favorite movies"
+                            />
+                        </div>
+                        <div class="inputWrapper">
+                            <label>Description</label>
+                            <input
+                                id="description"
+                                type="textaera"
+                                name="description"
+                                v-model="description"
+                                placeholder="Few words about your list"
+                            />
+                        </div>
+                        <div class="inputWrapper">
+                            <label>Private List </label>
+                            <input
+                                id="privateList"
+                                type="checkbox"
+                                name="privateList"
+                                v-model="privateList"
+                                placeholder="Few words about your list"
+                                class="w-2/6"
+                            />
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <MyButton cta="Create list" type="submit"></MyButton>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- User is connected and has a list to save fav. movies -->
+        <div v-if="isConnected && movieListId" class="lg:block hidden">
+            <div v-if="!favoriteMovies.length">
+                <p class="text-center">
+                    Your list is currently empty.
+                    <RouterLink to="/all-movies">Explore our collection and add your favorites.</RouterLink>
+                </p>
+            </div>
+
+            <div v-if="favoriteMovies.length >= 1">
+                <div class="grid grid-cols-4 grid-rows-3 gap-3" v-if="favoriteMovies">
+                    <MovieCard
+                        v-for="movie in favoriteMovies"
+                        :key="movie.id"
+                        :title="movie.original_title"
+                        :moviePosterPath="movie.poster_path"
+                        :rating="movie.vote_average"
+                        :movieId="movie.id"
+                    />
                 </div>
             </div>
         </div>
 
         <!-- Mobile version -->
+        <!-- User is not connected -->
         <div v-if="!isConnected" class="lg:hidden">
             <div
                 class="w-full h-screen pt-[3vh]"
@@ -46,7 +122,8 @@
             </div>
         </div>
 
-        <div v-if="isConnected && !movieListId" class="grid grid-cols-1">
+        <!-- User is connected but did not create a list -->
+        <div v-if="isConnected && !movieListId" class="grid grid-cols-1 lg:hidden">
             <div class="flex flex-col justify-center">
                 <p class="text-center">
                     Dear user, <br />
@@ -93,10 +170,12 @@
             </form>
         </div>
 
-        <div v-if="isConnected && movieListId">
+        <!-- User is connected and has a list to save fav. movies -->
+        <div v-if="isConnected && movieListId" class="lg:hidden">
             <div v-if="!favoriteMovies.length">
                 <p class="text-center">
-                    Your list is empty. <RouterLink to="/all-movies"><br />Discover our movies to add them.</RouterLink>
+                    Your list is currently empty.
+                    <RouterLink to="/all-movies"><br />Explore our collection and add your favorites.</RouterLink>
                 </p>
             </div>
 
@@ -124,6 +203,7 @@ import MyButton from '../components/MyButton.vue'
 import axios from 'axios'
 import { onMounted } from 'vue'
 import MovieCard from '@/components/MovieCard.vue'
+import { watchArray } from '@vueuse/core'
 
 export default {
     name: 'FavoriteView',
@@ -140,15 +220,6 @@ export default {
         onMounted(() => {
             authStore.userConnected()
             favoriteStore.retrieveListID()
-
-            // console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
-
-            // if (movieListId !== null) {
-            //     console.log('FETCHING IN MOUNTED')
-            //     favoriteStore.fetchFavorite()
-            //     console.log('fav movies in mounted', favoriteMovies)
-            // }
-            // console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
         })
 
         return {
@@ -194,7 +265,6 @@ export default {
 
                 this.movieListId = response.data.id
                 localStorage.setItem('movieListId', this.movieListId)
-                console.log(this.movieListId)
             } catch (error) {
                 console.log(error)
             }
@@ -204,25 +274,13 @@ export default {
             this.$router.push(`/account`)
         },
     },
-    computed: {
-        // favoriteMoviesLength() {
-        //     return this.favoriteMovies.length
-        // },
-    },
+    computed: {},
     watch: {
         movieListId(newValue) {
             if (newValue) {
                 this.fetchFavorite()
             }
         },
-
-        // favoriteMovies: {
-        //     deep: true,
-        //     handler(newValue, oldValue) {
-        //         console.log('I AM IN THE WATCHER', newValue)
-        //         this.fetchFavorite()
-        //     },
-        // },
     },
 
     components: {

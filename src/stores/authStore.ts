@@ -76,7 +76,6 @@ export const useAuthStore = defineStore({
         },
 
         async logOut() {
-            console.log('IN LOGOUT')
             localStorage.removeItem('account Id')
             localStorage.removeItem('access Token')
             localStorage.removeItem('request token')

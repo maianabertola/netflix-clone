@@ -185,7 +185,7 @@ export default {
                         this.isLoggedOut = false
                         this.isConnected = false
                         this.userConnected()
-                    }, 5000) // after 5 seconds
+                    }, 5000)
                 }
             },
             immediate: true,

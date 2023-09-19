@@ -125,6 +125,8 @@
 import axios from 'axios'
 import Rating from '@/components/Rating.vue'
 
+const apiAccessToken = import.meta.env.VITE_APIACCESSTOKEN
+
 export default {
     name: 'MovieDetails',
     data() {
@@ -162,8 +164,7 @@ export default {
                 const response = await axios.get(`https://api.themoviedb.org/3/movie/${this.movieId}?language=en-US`, {
                     headers: {
                         accept: 'application/json',
-                        Authorization:
-                            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNDNjZjFkOGRjNTI4YzNkYWJkNmI2N2JhOGMxNDdmMiIsInN1YiI6IjY0ZmQ4MGJkNmEyMjI3MDBmZDFlYzVkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LG0DOBro9Ews_O2t1BheIDjZrxgBUcYSZF1SaET8_NA',
+                        Authorization: 'Bearer ' + apiAccessToken,
                     },
                 })
                 this.movieDetails = response.data
