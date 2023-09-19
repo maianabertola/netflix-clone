@@ -12,7 +12,7 @@
                 <div>
                     <p>
                         If you want to keep a digital list of your favorite movies that's accessible from anywhere, you
-                        can create an account
+                        can create an account.
                     </p>
                     <div>
                         <p>First, give our TMDB partner your consent</p>
@@ -47,7 +47,7 @@
             </div>
             <div v-if="isLoggedOut && isConnected">
                 <div><p class="italic text-5xl">You have been logged out</p></div>
-                <div><p>This page will automatically refresh.</p></div>
+                <div><p>Refresh this page to log in again.</p></div>
             </div>
         </div>
 
@@ -63,14 +63,13 @@
                 <h1>Account</h1>
                 <hr />
             </div>
-            <div class="border"></div>
 
             <div v-if="!isConnected && !requestToken" class="mb-5 flex flex-col justify-center items-center">
                 <div><p class="italic text-xl">Create an account</p></div>
                 <div>
                     <p class="text-center">
                         If you want to keep a digital list of your favorite movies that's accessible from anywhere, you
-                        can create an account
+                        can create an account.
                     </p>
                 </div>
                 <div>
@@ -109,7 +108,7 @@
             </div>
             <div v-if="isLoggedOut && isConnected">
                 <div><p class="italic text-5xl">You have been logged out</p></div>
-                <div><p>This page will automatically refresh.</p></div>
+                <div><p>Refresh this page to log in again.</p></div>
             </div>
         </div>
 
@@ -174,22 +173,27 @@ export default {
         },
     },
     watch: {
-        accessToken(newValue) {
-            console.log('user is connected or not', newValue)
+        requestToken(newValue) {
             this.userConnected()
         },
-        isLoggedOut: {
-            handler(newValue) {
-                if (newValue == true) {
-                    setTimeout(() => {
-                        this.isLoggedOut = false
-                        this.isConnected = false
-                        this.userConnected()
-                    }, 5000)
-                }
-            },
-            immediate: true,
+        accessToken(newValue) {
+            this.userConnected()
         },
+        // isLoggedOut: {
+        //     handler(newValue) {
+        //         if (newValue == true) {
+        //             setTimeout(() => {
+        //                 console.log('HERE IN LOGOUT')
+        //                 this.isLoggedOut = false
+        //                 this.isConnected = false
+        //                 console.log('isConn', this.isConnected)
+        //                 this.userConnected()
+        //                 console.log('isConn', this.isConnected)
+        //             }, 5000)
+        //         }
+        //     },
+        //     immediate: true,
+        // },
     },
     components: {
         MyButton,

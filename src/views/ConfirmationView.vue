@@ -10,9 +10,10 @@
             <div class="text-center w-12/12 m-auto p-10">
                 <h2>Good news,</h2>
                 <p>
-                    The first step to create your account is done!
+                    You've successfully completed the first step in creating your account.
+
                     <br />
-                    You can close this window and continue the process.
+                    Feel free to close this tab and continue with the next steps.
                 </p>
             </div>
         </div>
@@ -21,7 +22,7 @@
 
 <script lang="ts">
 export default {
-    name: '',
+    name: 'ConfirmationView',
     data() {
         return {}
     },
