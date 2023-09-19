@@ -1,6 +1,10 @@
 <template>
     <div class="relative">
-        <nav class="w-full fixed top-0 left-0 right-0 p-5 z-50" :class="{ changeBackground: scrollPosition > 50 }">
+        <!-- Navbar desktop -->
+        <nav
+            class="fixed top-0 left-0 right-0 py-5 px-[4vw] z-50 hidden lg:block"
+            :class="{ changeBackground: scrollPosition > 50 }"
+        >
             <div class="flex justify-between">
                 <div>
                     <RouterLink to="/"><img src="../assets/logo.png" alt="Netflix logo" /></RouterLink>
@@ -9,11 +13,20 @@
                     <RouterLink to="/"><li>Homepage</li></RouterLink>
                     <RouterLink to="/all-movies"> <li>Movies</li></RouterLink>
                     <RouterLink to="/favorite-movies"> <li>Favorite</li></RouterLink>
-                    <RouterLink to="/about"> <li>About</li></RouterLink>
                     <RouterLink to="/account"><li>Account</li></RouterLink>
                 </ul>
             </div>
         </nav>
+        <div class="relative">
+            <nav class="fixed top-0 left-0 right-0 py-5 px-[4vw] z-50">
+                <ul class="flex flex-row gap-10 content-center items-center w-full">
+                    <RouterLink to="/"><li>Homepage</li></RouterLink>
+                    <RouterLink to="/all-movies"> <li>Movies</li></RouterLink>
+                    <RouterLink to="/favorite-movies"> <li>Favorite</li></RouterLink>
+                    <RouterLink to="/account"><li>Account</li></RouterLink>
+                </ul>
+            </nav>
+        </div>
     </div>
 </template>
 

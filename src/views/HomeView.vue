@@ -3,13 +3,13 @@
     <div class="vl-parent">
         <Loading
             :active="isLoadingCategories || isLoading"
-            isFullPage="true"
+            :isFullPage="true"
             color="red"
             loader="bars"
             backgroundColor="black"
-            width="800"
-            zIndex="999"
-            opacity="100"
+            :width="800"
+            :zIndex="999"
+            :opacity="100"
         >
         </Loading>
     </div>
@@ -31,7 +31,7 @@
             <hr />
         </div>
         <div class="-z-10 text-[25rem] grid grid-cols-4 grid-rows-1 numbers cursor-pointer relative">
-            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700 mr-3">
+            <div v-for="number in topMovies" class="text-slate-100 hover:text-red-700 mr-3" :key="number">
                 {{ number }}
             </div>
         </div>

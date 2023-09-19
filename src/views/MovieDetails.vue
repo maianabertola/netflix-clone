@@ -30,7 +30,7 @@
                     Produced by:
                     <li
                         v-for="company in this.movieDetails.production_companies"
-                        key="company.id"
+                        :key="company.id"
                         class="font-semibold"
                     >
                         {{ company.name }}
@@ -40,7 +40,7 @@
             <div class="row-start-5 row-end-6 col-start-1 col-end-3">
                 <ol class="flex flex-row gap-3">
                     Genre:
-                    <li v-for="genre in this.movieDetails.genres" key="genre.id" class="font-semibold">
+                    <li v-for="genre in this.movieDetails.genres" :key="genre.id" class="font-semibold">
                         {{ genre.name }}
                     </li>
                 </ol>
@@ -50,7 +50,7 @@
                     Countries:
                     <li
                         v-for="country in this.movieDetails.production_countries"
-                        key="country.iso_3166_1"
+                        :key="country.iso_3166_1"
                         class="font-semibold"
                     >
                         {{ country.name }}

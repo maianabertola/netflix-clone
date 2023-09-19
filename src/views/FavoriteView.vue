@@ -19,8 +19,7 @@
                         can create an account. To do so, you need to register first and agree to share data with our
                         partner, TMDB.
                     </p>
-                    <!-- When clicking, it fires the function createSession -->
-                    <MyButton cta="Create account" @click="() => this.createToken()"></MyButton>
+                    <MyButton cta="Create an account" @click="() => navToAccount"></MyButton>
                 </div>
             </div>
         </div>
@@ -120,14 +119,14 @@ export default {
             authStore.userConnected()
             favoriteStore.retrieveListID()
 
-            console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
+            // console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
 
-            if (movieListId !== null) {
-                console.log('FETCHING IN MOUNTED')
-                favoriteStore.fetchFavorite()
-                console.log('fav movies in mounted', favoriteMovies)
-            }
-            console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
+            // if (movieListId !== null) {
+            //     console.log('FETCHING IN MOUNTED')
+            //     favoriteStore.fetchFavorite()
+            //     console.log('fav movies in mounted', favoriteMovies)
+            // }
+            // console.log('MOVIE LIST ID IN MOUNTED', movieListId.value)
         })
 
         return {
@@ -177,6 +176,11 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        navToAccount() {
+            console.log('in nav')
+            this.$emit('click')
+            this.$router.push(`/account`)
         },
     },
     computed: {
