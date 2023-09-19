@@ -1,5 +1,6 @@
 <template>
-    <div v-if="movieId && movieDetails">
+    <!-- DESKTOP VERSION -->
+    <div v-if="movieId && movieDetails" class="hidden lg:block">
         <div class="relative h-[70vh] overflow-hidden">
             <img :src="movieBackDrop" :alt="this.movieDetails.title" />
         </div>
@@ -59,6 +60,65 @@
             </div>
         </div>
     </div>
+
+    <!-- RESPONSIVE VERSION -->
+    <div v-if="movieId && movieDetails" class="lg:hidden">
+        <div class="relative h-[70vh] overflow-hidden">
+            <img :src="moviePosterMobile" :alt="this.movieDetails.title" />
+        </div>
+        <div class="grid grid-cols-1 gap-4 grid-row-6 p-5">
+            <div class="titleSection p-0">
+                <h1 class="text-2xl">{{ this.movieDetails.title }}</h1>
+                <hr />
+            </div>
+            <div class="row-start-2 row-end-3">
+                <p class="italic text-xl m-0">{{ this.movieDetails.tagline }}</p>
+            </div>
+            <div class="row-start-3 row-end-4 flex flex-row gap-3">
+                <Rating :rating="this.movieDetails.vote_average"></Rating>
+                <div>
+                    <p class="m-0">|| Release Date: {{ this.movieDetails.release_date }}</p>
+                </div>
+            </div>
+
+            <div class="row-start-4 row-end-5">
+                <p>{{ this.movieDetails.overview }}</p>
+            </div>
+            <div class="row-start-5 row-end-6">
+                <ol class="flex flex-row gap-3">
+                    Genre:
+                    <li v-for="genre in this.movieDetails.genres" :key="genre.id" class="font-semibold">
+                        {{ genre.name }}
+                    </li>
+                </ol>
+            </div>
+            <div class="row-start-6 row-end-7">
+                <ol class="flex flex-row gap-3">
+                    Produced by:
+                    <li
+                        v-for="company in this.movieDetails.production_companies"
+                        :key="company.id"
+                        class="font-semibold"
+                    >
+                        {{ company.name }}
+                    </li>
+                </ol>
+            </div>
+
+            <div class="row-start-8 row-end-9">
+                <ol class="flex flex-row gap-3">
+                    Countries:
+                    <li
+                        v-for="country in this.movieDetails.production_countries"
+                        :key="country.iso_3166_1"
+                        class="font-semibold"
+                    >
+                        {{ country.name }}
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -83,6 +143,14 @@ export default {
             if (this.movieDetails) {
                 const rootpath = 'https://image.tmdb.org/t/p/original/'
                 return rootpath + this.movieDetails.backdrop_path
+            } else {
+                return null
+            }
+        },
+        moviePosterMobile() {
+            if (this.movieDetails) {
+                const rootpath = 'https://image.tmdb.org/t/p/original/'
+                return rootpath + this.movieDetails.poster_path
             } else {
                 return null
             }
